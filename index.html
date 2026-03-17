@@ -8,20 +8,27 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg: #fafafa;
+  --bg: #f4f6f8;
   --surface: #fff;
-  --border: #eee;
-  --text: #111;
-  --text-2: #555;
-  --text-3: #999;
-  --accent: #2563eb;
-  --accent-light: #f0f4ff;
-  --red: #dc2626;
-  --red-light: #fef2f2;
-  --amber: #d97706;
-  --amber-light: #fffbeb;
-  --green: #16a34a;
-  --green-light: #f0fdf4;
+  --border: #dde3ea;
+  --text: #1a2633;
+  --text-2: #4a5c6d;
+  --text-3: #8494a5;
+  --accent: #3572b0;
+  --accent-light: #c7dff8;
+  --accent-dark: #1e4d7b;
+  --secondary: #d07030;
+  --secondary-light: #fce8d8;
+  --teal: #3a8888;
+  --teal-light: #d4f0f0;
+  --red: #b33b3b;
+  --red-light: #f8e0e0;
+  --amber: #9e8830;
+  --amber-light: #f5efd4;
+  --green: #2e7a48;
+  --green-light: #ddf0e4;
+  --info: #3572b0;
+  --info-light: #c7dff8;
   --radius: 8px;
 }
 body {
@@ -112,8 +119,8 @@ main { flex: 1; overflow-y: auto; }
   text-transform: uppercase; letter-spacing: 0.04em;
 }
 .sev-high { background: var(--red-light); color: var(--red); }
-.sev-med { background: var(--amber-light); color: var(--amber); }
-.sev-low { background: var(--accent-light); color: var(--accent); }
+.sev-med { background: var(--secondary-light); color: var(--secondary); }
+.sev-low { background: var(--teal-light); color: var(--teal); }
 .case-why {
   background: #f8f8f8; border-left: 3px solid var(--accent);
   padding: 10px 14px; border-radius: 4px; margin-bottom: 12px;
@@ -292,7 +299,7 @@ tr:hover td { background: #fafafa; }
 }
 .login-box .logo-big {
   width: 56px; height: 56px; margin: 0 auto 20px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #3572b0, #1e4d7b);
   border-radius: 14px; display: flex; align-items: center; justify-content: center;
   color: #fff; font-size: 22px; font-weight: 800;
 }
@@ -303,14 +310,14 @@ tr:hover td { background: #fafafa; }
   border-radius: 8px; font-size: 14px; text-align: center;
   outline: none; transition: 0.2s;
 }
-.login-box input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+.login-box input:focus { border-color: #3572b0; box-shadow: 0 0 0 3px rgba(53,114,176,0.12); }
 .login-box .login-btn {
   width: 100%; padding: 10px; margin-top: 12px;
-  background: #2563eb; color: #fff; border: none; border-radius: 8px;
+  background: #3572b0; color: #fff; border: none; border-radius: 8px;
   font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.15s;
 }
-.login-box .login-btn:hover { background: #1d4ed8; }
-.login-error { color: #dc2626; font-size: 12px; margin-top: 10px; display: none; }
+.login-box .login-btn:hover { background: #1e4d7b; }
+.login-error { color: #b33b3b; font-size: 12px; margin-top: 10px; display: none; }
 </style>
 </head>
 <body>
@@ -769,17 +776,17 @@ function drawTopo() {
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
 
   const nodes = [
-    { id:'export', l:'Export', x:W*.5, y:28, r:12, c:'#6366f1' },
-    { id:'total', l:'Total', x:W*.5, y:75, r:14, c:'#3b82f6' },
-    { id:'hp', l:'HP Sep', x:W*.35, y:140, r:13, c:'#f59e0b' },
-    { id:'lp', l:'LP Sep', x:W*.65, y:140, r:13, c:'#f59e0b' },
-    { id:'n3', l:'N3', x:W*.1, y:210, r:10, c:'#10b981' },
-    { id:'n6', l:'N6', x:W*.22, y:210, r:10, c:'#10b981' },
-    { id:'w4', l:'W4', x:W*.34, y:210, r:10, c:'#dc2626', anom:true },
-    { id:'w7', l:'W7', x:W*.46, y:210, r:10, c:'#10b981' },
-    { id:'e1', l:'E1', x:W*.58, y:210, r:10, c:'#10b981' },
-    { id:'e2', l:'E2', x:W*.7, y:210, r:10, c:'#10b981' },
-    { id:'n8', l:'N8', x:W*.82, y:210, r:10, c:'#10b981' },
+    { id:'export', l:'Export', x:W*.5, y:28, r:12, c:'#1e4d7b' },
+    { id:'total', l:'Total', x:W*.5, y:75, r:14, c:'#3572b0' },
+    { id:'hp', l:'HP Sep', x:W*.35, y:140, r:13, c:'#d07030' },
+    { id:'lp', l:'LP Sep', x:W*.65, y:140, r:13, c:'#d07030' },
+    { id:'n3', l:'N3', x:W*.1, y:210, r:10, c:'#3a8888' },
+    { id:'n6', l:'N6', x:W*.22, y:210, r:10, c:'#3a8888' },
+    { id:'w4', l:'W4', x:W*.34, y:210, r:10, c:'#b33b3b', anom:true },
+    { id:'w7', l:'W7', x:W*.46, y:210, r:10, c:'#3a8888' },
+    { id:'e1', l:'E1', x:W*.58, y:210, r:10, c:'#3a8888' },
+    { id:'e2', l:'E2', x:W*.7, y:210, r:10, c:'#3a8888' },
+    { id:'n8', l:'N8', x:W*.82, y:210, r:10, c:'#3a8888' },
   ];
   // Wells
   const wg = [
@@ -791,7 +798,7 @@ function drawTopo() {
     const p = nodes.find(n=>n.id===g.p);
     g.w.forEach((name,i) => {
       const off = (i-(g.w.length-1)/2)*24;
-      wells.push({id:name,l:name,x:p.x+off,y:p.y+55,r:7,c:'#cbd5e1',parent:g.p});
+      wells.push({id:name,l:name,x:p.x+off,y:p.y+55,r:7,c:'#8494a5',parent:g.p});
     });
   });
   const all = [...nodes,...wells];
@@ -807,12 +814,12 @@ function drawTopo() {
     const na=all.find(n=>n.id===a), nb=all.find(n=>n.id===b);
     if(na&&nb){
       const hl = a==='w4'||b==='w4';
-      s+=`<line x1="${na.x}" y1="${na.y}" x2="${nb.x}" y2="${nb.y}" stroke="${hl?'#dc2626':'#e5e7eb'}" stroke-width="${hl?2.5:1.5}"/>`;
+      s+=`<line x1="${na.x}" y1="${na.y}" x2="${nb.x}" y2="${nb.y}" stroke="${hl?'#b33b3b':'#dde3ea'}" stroke-width="${hl?2.5:1.5}"/>`;
     }
   });
   all.forEach(n=>{
     s+=`<g style="cursor:pointer" onclick="selectNode('${n.id}')">`;
-    if(n.anom) s+=`<circle cx="${n.x}" cy="${n.y}" r="${n.r+4}" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="3 2" opacity="0.5"/>`;
+    if(n.anom) s+=`<circle cx="${n.x}" cy="${n.y}" r="${n.r+4}" fill="none" stroke="#b33b3b" stroke-width="1.5" stroke-dasharray="3 2" opacity="0.5"/>`;
     s+=`<circle cx="${n.x}" cy="${n.y}" r="${n.r}" fill="${n.c}" stroke="#fff" stroke-width="2"/>`;
     const ly = n.r<9 ? n.y+n.r+12 : n.y-n.r-7;
     s+=`<text x="${n.x}" y="${ly}" text-anchor="middle" font-size="${n.r<9?9:10}" fill="#999" font-weight="500">${n.l}</text>`;
@@ -843,10 +850,10 @@ function initCharts() {
   if (chartsReady) return; chartsReady = true;
   const yrs = ['2025','2027','2029','2031','2033','2035','2037','2039'];
   const cfgs = [
-    {id:'c-gas',d:[3.5,3.2,2.8,3.2,2.4,1.8,1.2,0.6],c:'#3b82f6'},
-    {id:'c-oil',d:[350,300,280,285,220,160,100,50],c:'#f59e0b'},
-    {id:'c-water',d:[5,10,80,400,1200,1800,2200,2400],c:'#06b6d4'},
-    {id:'c-temp',d:[68,65,63,62,58,55,52,50],c:'#10b981'},
+    {id:'c-gas',d:[3.5,3.2,2.8,3.2,2.4,1.8,1.2,0.6],c:'#3572b0'},
+    {id:'c-oil',d:[350,300,280,285,220,160,100,50],c:'#d07030'},
+    {id:'c-water',d:[5,10,80,400,1200,1800,2200,2400],c:'#3a8888'},
+    {id:'c-temp',d:[68,65,63,62,58,55,52,50],c:'#2e7a48'},
   ];
   cfgs.forEach(cfg=>{
     const ctx=document.getElementById(cfg.id); if(!ctx) return;
