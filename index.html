@@ -288,7 +288,7 @@ tr:hover td { background: var(--n-25); }
     <button class="login-btn" onclick="tryLogin()">Continue</button>
     <div class="login-error" id="login-error">Invalid code</div>
     <div class="login-hint">Hint: ada2026</div>
-    <div style="color: rgba(255,255,255,0.15); font-size: 10px; margin-top: 40px; letter-spacing: 0.05em;">v3.2.0</div>
+    <div style="color: rgba(255,255,255,0.15); font-size: 10px; margin-top: 40px; letter-spacing: 0.05em;">v3.4.0</div>
   </div>
 </div>
 
@@ -394,7 +394,7 @@ tr:hover td { background: var(--n-25); }
                 </div>
               </div>
               <div class="case-footer">
-                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
+                <button class="btn btn-sm btn-primary sim-btn" data-case="case1" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
                 <button class="btn btn-sm" onclick="event.stopPropagation(); navigateTo('production'); setTimeout(()=>selectNode('hp'),200)">View in Topology</button>
               </div>
             </div>
@@ -427,7 +427,7 @@ tr:hover td { background: var(--n-25); }
                 </div>
               </div>
               <div class="case-footer">
-                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
+                <button class="btn btn-sm btn-primary sim-btn" data-case="case2" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
                 <button class="btn btn-sm" onclick="event.stopPropagation(); navigateTo('production'); setTimeout(()=>selectNode('w4'),200)">View in Topology</button>
               </div>
             </div>
@@ -460,7 +460,7 @@ tr:hover td { background: var(--n-25); }
                 </div>
               </div>
               <div class="case-footer">
-                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
+                <button class="btn btn-sm btn-primary sim-btn" data-case="case3" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
                 <button class="btn btn-sm" onclick="event.stopPropagation(); navigateTo('production'); setTimeout(()=>selectNode('lp'),200)">View in Topology</button>
               </div>
             </div>
@@ -493,7 +493,7 @@ tr:hover td { background: var(--n-25); }
                 </div>
               </div>
               <div class="case-footer">
-                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
+                <button class="btn btn-sm btn-primary sim-btn" data-case="case4" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
               </div>
             </div>
 
@@ -520,7 +520,7 @@ tr:hover td { background: var(--n-25); }
                 </div>
               </div>
               <div class="case-footer">
-                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
+                <button class="btn btn-sm btn-primary sim-btn" data-case="case5" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
               </div>
             </div>
 
@@ -552,7 +552,7 @@ tr:hover td { background: var(--n-25); }
                 </div>
               </div>
               <div class="case-footer">
-                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
+                <button class="btn btn-sm btn-primary sim-btn" data-case="case6" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
               </div>
             </div>
 
@@ -677,7 +677,7 @@ tr:hover td { background: var(--n-25); }
               </div>
               <div class="case-explanation"><strong>Why:</strong> Gas flow 3.2 MSm³/d — 118% of design capacity.</div>
             </div>
-            <div class="case-footer"><button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); toggleSim(this)">Add to Sim</button></div>
+            <div class="case-footer"><button class="btn btn-sm btn-primary sim-btn" data-case="case1" onclick="event.stopPropagation(); toggleSim(this)">Add to Sim</button></div>
           </div>
           <div class="case-card" onclick="openPanel('case2')">
             <div class="case-inner">
@@ -689,7 +689,7 @@ tr:hover td { background: var(--n-25); }
               </div>
               <div class="case-explanation"><strong>Why:</strong> 43.2 m/s — 108% of API velocity limit.</div>
             </div>
-            <div class="case-footer"><button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); toggleSim(this)">Add to Sim</button></div>
+            <div class="case-footer"><button class="btn btn-sm btn-primary sim-btn" data-case="case2" onclick="event.stopPropagation(); toggleSim(this)">Add to Sim</button></div>
           </div>
         </div>
 
@@ -955,18 +955,18 @@ const panels = {
     <div class="panel-section"><div class="panel-section-title">Why it exceeds</div><p style="font-size:13px;color:var(--text-2);line-height:1.8">Gas flow reaches <strong style="color:var(--r-400)">3.2 MSm³/d</strong> vs design of 2.7M — <strong>118% utilisation</strong>. Caused by coincident peak on N3 + N6 risers after routing change moved wells A05–A06 to N6. All 4 HP-feed risers producing near-peak simultaneously.</p></div>
     <div class="panel-section"><div class="panel-section-title">Key Values</div><div class="panel-kv"><div><div class="k">Date</div><div class="v">2031-06-15</div></div><div><div class="k">Profile</div><div class="v">A20</div></div><div><div class="k">Gas Flow</div><div class="v" style="color:var(--r-400)">3.2M Sm³/d</div></div><div><div class="k">Design Capacity</div><div class="v">2.7M Sm³/d</div></div><div><div class="k">Oil Flow</div><div class="v">285 Sm³/d</div></div><div><div class="k">Water Cut</div><div class="v">0.42</div></div><div><div class="k">Pressure</div><div class="v">72 bar</div></div><div><div class="k">Temperature</div><div class="v">68°C</div></div></div></div>
     <div class="panel-section"><div class="panel-section-title">Riser Contributions</div><div class="contrib-row"><span class="name">N3 Riser (A01–A03)</span><span class="val">1.4M Sm³/d (44%)</span></div><div class="contrib-row"><span class="name">N6 Riser (A04–A05)</span><span class="val">1.1M Sm³/d (34%)</span></div><div class="contrib-row"><span class="name">W4 Riser (B01–B02)</span><span class="val">0.4M Sm³/d (13%)</span></div><div class="contrib-row"><span class="name">W7 Riser (C01–C03)</span><span class="val">0.3M Sm³/d (9%)</span></div></div>
-    <div class="panel-section"><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm">Add to Simulation</button><button class="btn btn-sm" onclick="closePanel();navigateTo('production');setTimeout(()=>{selectNode('hp')},200)">View in Topology</button></div></div>`},
+    <div class="panel-section"><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm sim-btn" data-case="case1" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button><button class="btn btn-sm" onclick="closePanel();navigateTo('production');setTimeout(()=>{selectNode('hp')},200)">View in Topology</button></div></div>`},
   case2:{t:'W4 Riser — Erosion Velocity',h:`
     <div class="panel-section"><div class="panel-section-title">Screening Criterion</div><p style="font-size:13px;color:var(--text-2);line-height:1.8"><strong>ρv² / Erosional Velocity → W4 Riser.</strong> This is the timestep where erosional velocity is highest across all risers. Defines the <strong>riser sizing verification requirement</strong> per API RP 14E.</p></div>
     <div class="panel-section"><div class="panel-section-title">Why it exceeds</div><p style="font-size:13px;color:var(--text-2);line-height:1.8">Velocity reaches <strong style="color:var(--r-400)">43.2 m/s</strong> vs API limit of 40 m/s — <strong>108%</strong>. W7 maintenance rerouted wells C01, C02 through W4, doubling its throughput without diameter change.</p></div>
     <div class="panel-section"><div class="panel-section-title">Key Values</div><div class="panel-kv"><div><div class="k">Date</div><div class="v">2032-01-10</div></div><div><div class="k">Velocity</div><div class="v" style="color:var(--r-400)">43.2 m/s</div></div><div><div class="k">API Limit</div><div class="v">40 m/s</div></div><div><div class="k">ρv²</div><div class="v" style="color:var(--r-400)">27,973</div></div><div><div class="k">Volume Flow</div><div class="v">5,496 m³/h</div></div><div><div class="k">Mix Density</div><div class="v">34.0 kg/m³</div></div></div></div>
     <div class="panel-section"><div class="panel-section-title">Contributing Wells</div><div class="contrib-row"><span class="name">B01, B02 (W4 native)</span><span class="val">Normal routing</span></div><div class="contrib-row"><span class="name">C01, C02 (from W7)</span><span class="val">Maintenance reroute</span></div></div>
-    <div class="panel-section"><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm">Add to Simulation</button><button class="btn btn-sm" onclick="closePanel();navigateTo('production');setTimeout(()=>{selectNode('w4')},200)">View in Topology</button></div></div>`},
+    <div class="panel-section"><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm sim-btn" data-case="case2" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button><button class="btn btn-sm" onclick="closePanel();navigateTo('production');setTimeout(()=>{selectNode('w4')},200)">View in Topology</button></div></div>`},
   case3:{t:'LP Separator — Peak Liquid',h:`
     <div class="panel-section"><div class="panel-section-title">Screening Criterion</div><p style="font-size:13px;color:var(--text-2);line-height:1.8"><strong>Peak Liquid Rate → LP Separator.</strong> The timestep where LP Separator liquid throughput is highest. Defines <strong>separator liquid residence time and slug handling</strong>.</p></div>
     <div class="panel-section"><div class="panel-section-title">Why it's marginal</div><p style="font-size:13px;color:var(--text-2);line-height:1.8">Liquid flow reaches <strong style="color:var(--w-300)">2,800 Sm³/d</strong> — <strong>93% of design</strong> (3,000). Not exceeded, but limited margin. E2 water cut increase + N6 new well tie-in.</p></div>
     <div class="panel-section"><div class="panel-section-title">Key Values</div><div class="panel-kv"><div><div class="k">Date</div><div class="v">2033-09-22</div></div><div><div class="k">Liquid Flow</div><div class="v" style="color:var(--w-300)">2,800 Sm³/d</div></div><div><div class="k">Design</div><div class="v">3,000 Sm³/d</div></div><div><div class="k">Water Cut</div><div class="v">0.68</div></div><div><div class="k">Pressure</div><div class="v">12 bar</div></div><div><div class="k">Temperature</div><div class="v">52°C</div></div></div></div>
-    <div class="panel-section"><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm">Add to Simulation</button><button class="btn btn-sm" onclick="closePanel();navigateTo('production');setTimeout(()=>{selectNode('lp')},200)">View in Topology</button></div></div>`},
+    <div class="panel-section"><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm sim-btn" data-case="case3" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button><button class="btn btn-sm" onclick="closePanel();navigateTo('production');setTimeout(()=>{selectNode('lp')},200)">View in Topology</button></div></div>`},
   line1:{t:'23-L-X001-BD20-10',h:`
     <div style="padding:14px 18px;background:var(--w-50);border-radius:8px;margin-bottom:24px;font-size:13px;color:var(--w-400);font-weight:500"><strong>Marginal:</strong> Peak velocity 38.5 m/s — 96% of 40 m/s limit</div>
     <div class="panel-section"><div class="panel-section-title">Line Properties</div><div class="panel-kv"><div><div class="k">Pipe Spec</div><div class="v">BD20</div></div><div><div class="k">DN</div><div class="v">10</div></div><div><div class="k">System</div><div class="v">23</div></div><div><div class="k">Service</div><div class="v">PV</div></div><div><div class="k">Length</div><div class="v">53.6 m</div></div><div><div class="k">Roughness</div><div class="v">0.05</div></div></div></div>
@@ -980,17 +980,27 @@ function openPanel(id) {
   const d = panels[id]; if(!d) return;
   document.getElementById('panel-title').textContent = d.t;
   document.getElementById('panel-body').innerHTML = d.h;
+  // Sync panel button state with existing selections
+  const existing = document.querySelector(`.sim-btn[data-case="${id}"].added`);
+  if (existing) {
+    const panelBtn = document.querySelector(`#panel-body .sim-btn[data-case="${id}"]`);
+    if (panelBtn) { panelBtn.classList.add('added'); panelBtn.innerHTML = '&#10003; Added'; }
+  }
   document.getElementById('panel').classList.add('open');
   document.getElementById('overlay').classList.add('open');
 }
 function toggleSim(btn) {
-  if (btn.classList.contains('added')) {
-    btn.classList.remove('added');
-    btn.innerHTML = btn.textContent.includes('Sim') ? 'Add to Sim' : 'Add to Simulation';
-  } else {
-    btn.classList.add('added');
-    btn.innerHTML = '&#10003; Added';
-  }
+  const caseId = btn.dataset.case;
+  const isAdded = btn.classList.contains('added');
+  document.querySelectorAll(`.sim-btn[data-case="${caseId}"]`).forEach(b => {
+    if (isAdded) {
+      b.classList.remove('added');
+      b.innerHTML = b.closest('.panel-body') ? 'Add to Simulation' : (b.closest('#view-cases') ? 'Add to Sim' : 'Add to Simulation');
+    } else {
+      b.classList.add('added');
+      b.innerHTML = '&#10003; Added';
+    }
+  });
 }
 function closePanel() {
   document.getElementById('panel').classList.remove('open');
