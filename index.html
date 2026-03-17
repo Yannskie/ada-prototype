@@ -152,13 +152,13 @@ main { flex: 1; overflow-y: auto; }
 .anomaly-desc { font-size: 12px; color: var(--text-3); margin-top: 2px; margin-left: 15px; }
 
 /* ---- Production page ---- */
-.prod-layout { display: grid; grid-template-columns: 220px 1fr; gap: 24px; }
+.prod-layout { display: grid; grid-template-columns: 140px 1fr; gap: 16px; }
 .prod-profiles {}
 .profile-btn {
   display: block; width: 100%; text-align: left;
-  padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px;
-  background: var(--surface); cursor: pointer; margin-bottom: 6px;
-  font-size: 13px; transition: 0.15s;
+  padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px;
+  background: var(--surface); cursor: pointer; margin-bottom: 4px;
+  font-size: 12px; transition: 0.15s;
 }
 .profile-btn:hover { border-color: #ccc; }
 .profile-btn.active { border-color: var(--accent); background: var(--accent-light); }
@@ -869,7 +869,17 @@ const panels = {
     <div class="panel-section"><h4>Why selected</h4><p style="font-size:13px;color:var(--text-2);line-height:1.7">HP Separator gas flow reached <b>3.2 MSm3/d</b> on 2031-06-15 — <b>18% above</b> the design envelope of 2.7 MSm3/d. Driven by combined output from N3 and N6 Risers following routing change where wells A05 and A06 were rerouted to N6.</p></div>
     <div class="panel-section"><h4>Metrics</h4><div class="panel-kv"><div><div class="k">Date</div><div class="v">2031-06-15</div></div><div><div class="k">Profile</div><div class="v">A20</div></div><div><div class="k">Gas Flow</div><div class="v" style="color:var(--red)">3.2M Sm3/d</div></div><div><div class="k">Design Limit</div><div class="v">2.7M Sm3/d</div></div><div><div class="k">Oil Flow</div><div class="v">285 Sm3/d</div></div><div><div class="k">Water Cut</div><div class="v">0.42</div></div></div></div>
     <div class="panel-section"><h4>Contributing assets</h4><div class="contrib-row"><span>N3 Riser</span><span>1.4M (44%)</span></div><div class="contrib-row"><span>N6 Riser</span><span>1.1M (34%)</span></div><div class="contrib-row"><span>W4 Riser</span><span>0.4M (13%)</span></div><div class="contrib-row"><span>W7 Riser</span><span>0.3M (9%)</span></div></div>
-    <div class="panel-section"><button class="btn btn-accent btn-sm">Add to Simulation</button> <button class="btn btn-sm">View in Topology</button></div>`},
+    <div class="panel-section"><button class="btn btn-accent btn-sm">Add to Simulation</button> <button class="btn btn-sm" onclick="closePanel();navigateTo('production');setTimeout(()=>{selectNode('hp')},200)">View in Topology</button></div>`},
+  case2:{t:'W4 Riser — Velocity Exceedance',h:`
+    <div class="panel-section"><h4>Why selected</h4><p style="font-size:13px;color:var(--text-2);line-height:1.7">W4 Riser velocity hit <b>43.2 m/s</b> on 2032-01-10 — exceeds the 40 m/s limit. Caused by rerouting of wells from W7 Riser during a maintenance shutdown, concentrating flow through W4.</p></div>
+    <div class="panel-section"><h4>Metrics</h4><div class="panel-kv"><div><div class="k">Date</div><div class="v">2032-01-10</div></div><div><div class="k">Profile</div><div class="v">A20</div></div><div><div class="k">Velocity</div><div class="v" style="color:var(--red)">43.2 m/s</div></div><div><div class="k">Limit</div><div class="v">40 m/s</div></div><div><div class="k">Volume Flow</div><div class="v">5,496</div></div><div><div class="k">Mix Density</div><div class="v">34.0</div></div></div></div>
+    <div class="panel-section"><h4>Contributing assets</h4><div class="contrib-row"><span>W4 wells (B01, B02)</span><span>Direct</span></div><div class="contrib-row"><span>Rerouted from W7</span><span>C01, C02</span></div></div>
+    <div class="panel-section"><button class="btn btn-accent btn-sm">Add to Simulation</button> <button class="btn btn-sm" onclick="closePanel();navigateTo('production');setTimeout(()=>{selectNode('w4')},200)">View in Topology</button></div>`},
+  case3:{t:'LP Separator — Liquid Surge',h:`
+    <div class="panel-section"><h4>Why selected</h4><p style="font-size:13px;color:var(--text-2);line-height:1.7">LP Separator liquid flow spiked to <b>2,800 Sm3/d</b> on 2033-09-22. Water cut increase on E2 Riser combined with a new well tie-in on N6 Riser contributed to the surge.</p></div>
+    <div class="panel-section"><h4>Metrics</h4><div class="panel-kv"><div><div class="k">Date</div><div class="v">2033-09-22</div></div><div><div class="k">Profile</div><div class="v">A21</div></div><div><div class="k">Liquid Flow</div><div class="v" style="color:var(--secondary)">2,800 Sm3/d</div></div><div><div class="k">Pressure</div><div class="v">29.5 bar</div></div><div><div class="k">Temperature</div><div class="v">52 C</div></div></div></div>
+    <div class="panel-section"><h4>Contributing assets</h4><div class="contrib-row"><span>E2 Riser</span><span>Water cut increase</span></div><div class="contrib-row"><span>N6 Riser</span><span>New well tie-in</span></div></div>
+    <div class="panel-section"><button class="btn btn-accent btn-sm">Add to Simulation</button> <button class="btn btn-sm" onclick="closePanel();navigateTo('production');setTimeout(()=>{selectNode('lp')},200)">View in Topology</button></div>`},
   line1:{t:'23-L-X001-BD20-10',h:`
     <div class="panel-section" style="padding:12px 16px;background:var(--amber-light);border-radius:6px;margin-bottom:20px;font-size:13px;color:var(--amber)"><b>Marginal:</b> Peak velocity 38.5 m/s — 96% of 40 m/s limit</div>
     <div class="panel-section"><h4>Properties</h4><div class="panel-kv"><div><div class="k">Pipe Spec</div><div class="v">BD20</div></div><div><div class="k">DN</div><div class="v">10</div></div><div><div class="k">System</div><div class="v">23</div></div><div><div class="k">Service</div><div class="v">PV</div></div><div><div class="k">Length</div><div class="v">53.6 m</div></div><div><div class="k">Roughness</div><div class="v">0.05</div></div></div></div>
