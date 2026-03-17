@@ -77,6 +77,8 @@ body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); c
 .btn:hover { border-color: var(--n-200); box-shadow: var(--shadow-sm); }
 .btn-primary { background: #FF8F00; color: #fff; border-color: #FF8F00; height: 40px; font-weight: 600; }
 .btn-primary:hover { background: #E68200; border-color: #E68200; box-shadow: 0 2px 8px rgba(255,143,0,0.3); }
+.btn-primary.added { background: var(--g-300); border-color: var(--g-300); pointer-events: auto; }
+.btn-primary.added:hover { background: #236b3a; border-color: #236b3a; box-shadow: 0 2px 8px rgba(46,122,72,0.3); }
 .btn-ghost { border: none; background: none; color: var(--text-2); padding: 8px 12px; }
 .btn-ghost:hover { color: var(--text); background: var(--n-100); }
 .btn-sm { padding: 5px 12px; font-size: 12px; }
@@ -392,7 +394,7 @@ tr:hover td { background: var(--n-25); }
                 </div>
               </div>
               <div class="case-footer">
-                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation()">Add to Simulation</button>
+                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
                 <button class="btn btn-sm" onclick="event.stopPropagation(); navigateTo('production'); setTimeout(()=>selectNode('hp'),200)">View in Topology</button>
               </div>
             </div>
@@ -425,7 +427,7 @@ tr:hover td { background: var(--n-25); }
                 </div>
               </div>
               <div class="case-footer">
-                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation()">Add to Simulation</button>
+                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
                 <button class="btn btn-sm" onclick="event.stopPropagation(); navigateTo('production'); setTimeout(()=>selectNode('w4'),200)">View in Topology</button>
               </div>
             </div>
@@ -458,7 +460,7 @@ tr:hover td { background: var(--n-25); }
                 </div>
               </div>
               <div class="case-footer">
-                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation()">Add to Simulation</button>
+                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
                 <button class="btn btn-sm" onclick="event.stopPropagation(); navigateTo('production'); setTimeout(()=>selectNode('lp'),200)">View in Topology</button>
               </div>
             </div>
@@ -491,7 +493,7 @@ tr:hover td { background: var(--n-25); }
                 </div>
               </div>
               <div class="case-footer">
-                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation()">Add to Simulation</button>
+                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
               </div>
             </div>
 
@@ -518,7 +520,7 @@ tr:hover td { background: var(--n-25); }
                 </div>
               </div>
               <div class="case-footer">
-                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation()">Add to Simulation</button>
+                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
               </div>
             </div>
 
@@ -550,7 +552,7 @@ tr:hover td { background: var(--n-25); }
                 </div>
               </div>
               <div class="case-footer">
-                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation()">Add to Simulation</button>
+                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
               </div>
             </div>
 
@@ -675,7 +677,7 @@ tr:hover td { background: var(--n-25); }
               </div>
               <div class="case-explanation"><strong>Why:</strong> Gas flow 3.2 MSm³/d — 118% of design capacity.</div>
             </div>
-            <div class="case-footer"><button class="btn btn-sm btn-primary" onclick="event.stopPropagation()">Add to Sim</button></div>
+            <div class="case-footer"><button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); toggleSim(this)">Add to Sim</button></div>
           </div>
           <div class="case-card" onclick="openPanel('case2')">
             <div class="case-inner">
@@ -687,7 +689,7 @@ tr:hover td { background: var(--n-25); }
               </div>
               <div class="case-explanation"><strong>Why:</strong> 43.2 m/s — 108% of API velocity limit.</div>
             </div>
-            <div class="case-footer"><button class="btn btn-sm btn-primary" onclick="event.stopPropagation()">Add to Sim</button></div>
+            <div class="case-footer"><button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); toggleSim(this)">Add to Sim</button></div>
           </div>
         </div>
 
@@ -980,6 +982,15 @@ function openPanel(id) {
   document.getElementById('panel-body').innerHTML = d.h;
   document.getElementById('panel').classList.add('open');
   document.getElementById('overlay').classList.add('open');
+}
+function toggleSim(btn) {
+  if (btn.classList.contains('added')) {
+    btn.classList.remove('added');
+    btn.innerHTML = btn.textContent.includes('Sim') ? 'Add to Sim' : 'Add to Simulation';
+  } else {
+    btn.classList.add('added');
+    btn.innerHTML = '&#10003; Added';
+  }
 }
 function closePanel() {
   document.getElementById('panel').classList.remove('open');
