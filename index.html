@@ -4,477 +4,679 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ADA 3.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 :root {
-  --bg: #f4f6f8;
-  --surface: #fff;
-  --border: #dde3ea;
-  --text: #1a2633;
-  --text-2: #4a5c6d;
-  --text-3: #8494a5;
-  --accent: #3572b0;
-  --accent-light: #c7dff8;
-  --accent-dark: #1e4d7b;
-  --secondary: #d07030;
-  --secondary-light: #fce8d8;
-  --teal: #3a8888;
-  --teal-light: #d4f0f0;
-  --red: #b33b3b;
-  --red-light: #f8e0e0;
-  --amber: #9e8830;
-  --amber-light: #f5efd4;
-  --green: #2e7a48;
-  --green-light: #ddf0e4;
-  --info: #3572b0;
-  --info-light: #c7dff8;
-  --radius: 8px;
+  /* From the palette */
+  --p-50: #c7dff8; --p-100: #a3c9f0; --p-200: #6ba6de; --p-300: #3b86cc;
+  --p-400: #3572b0; --p-500: #2a5d94; --p-600: #1e4d7b; --p-700: #153a5e; --p-800: #0d2640; --p-900: #091a2e;
+
+  --s-50: #fce8d8; --s-100: #f0c4a0; --s-200: #e09848; --s-300: #d07030; --s-400: #b86028; --s-500: #9a5020;
+
+  --t-50: #d4f0f0; --t-100: #a8d8d8; --t-200: #5aacac; --t-300: #3a8888; --t-400: #2e6c6c;
+
+  --n-0: #ffffff; --n-25: #fafbfc; --n-50: #f5f7f9; --n-100: #ebeef2; --n-150: #dde3ea;
+  --n-200: #c8ced6; --n-300: #99a5b4; --n-400: #6b7a8d; --n-500: #4a5c6d; --n-600: #33424f; --n-700: #1f2d3a; --n-800: #162030; --n-900: #0e1520;
+
+  --r-50: #f8e0e0; --r-100: #e8a0a0; --r-300: #cc4444; --r-400: #b33b3b; --r-500: #8b2020;
+  --g-50: #ddf0e4; --g-100: #a0d8b0; --g-300: #2e7a48; --g-400: #1e5c34;
+  --w-50: #f5efd4; --w-100: #ddd098; --w-300: #9e8830; --w-400: #7a6a20;
+
+  --bg: var(--n-50);
+  --surface: var(--n-0);
+  --surface-raised: var(--n-0);
+  --border: var(--n-150);
+  --border-subtle: var(--n-100);
+  --text: var(--n-800);
+  --text-2: var(--n-500);
+  --text-3: var(--n-300);
+  --accent: var(--p-400);
+  --accent-hover: var(--p-500);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --radius-lg: 14px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.08);
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--bg); color: var(--text);
-  font-size: 14px; line-height: 1.55;
+  font-size: 14px; line-height: 1.5;
   height: 100vh; overflow: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ---- Layout ---- */
-.app { display: flex; height: 100vh; }
-nav {
-  width: 200px; background: var(--surface); border-right: 1px solid var(--border);
-  padding: 24px 16px; flex-shrink: 0; display: flex; flex-direction: column;
-}
-nav .brand { font-size: 15px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 32px; color: var(--text); }
-nav .brand span { color: var(--text-3); font-weight: 400; font-size: 11px; display: block; margin-top: 2px; }
-nav a {
-  display: block; padding: 7px 10px; border-radius: 6px; font-size: 13px;
-  color: var(--text-2); text-decoration: none; margin-bottom: 2px; transition: 0.15s;
-}
-nav a:hover { background: var(--bg); color: var(--text); }
-nav a.active { background: var(--accent-light); color: var(--accent); font-weight: 600; }
-nav a .count {
-  float: right; background: var(--red); color: #fff;
-  font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 8px;
-}
-nav .spacer { flex: 1; }
-nav .meta { font-size: 11px; color: var(--text-3); }
-
-main { flex: 1; overflow-y: auto; }
-.topbar {
-  position: sticky; top: 0; z-index: 10; background: var(--surface);
-  border-bottom: 1px solid var(--border); padding: 14px 32px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.topbar h1 { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
-.topbar .actions { display: flex; gap: 8px; }
-
-.content { padding: 32px; max-width: 1200px; }
-
-/* ---- Buttons ---- */
-.btn {
-  padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 500;
-  border: 1px solid var(--border); background: var(--surface); color: var(--text);
-  cursor: pointer; transition: 0.15s;
-}
-.btn:hover { border-color: #ccc; }
-.btn-accent { background: var(--accent); color: #fff; border-color: var(--accent); }
-.btn-accent:hover { background: #1d4ed8; }
-.btn-ghost { border: none; background: none; color: var(--text-2); }
-.btn-ghost:hover { color: var(--text); }
-.btn-sm { padding: 4px 10px; font-size: 11px; }
-
-/* ---- Pages ---- */
-.page { display: none; }
-.page.active { display: block; }
-
-/* ---- Dashboard layout ---- */
-.dash { display: grid; grid-template-columns: 1fr 320px; gap: 32px; }
-.dash-main { min-width: 0; }
-.dash-side { min-width: 0; }
-
-/* ---- Section headers ---- */
-.section-head {
-  display: flex; align-items: baseline; justify-content: space-between;
-  margin-bottom: 16px;
-}
-.section-head h2 { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
-.section-head .sub { font-size: 12px; color: var(--text-3); }
-
-/* ---- Case cards (the gold) ---- */
-.case {
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 20px 24px; margin-bottom: 12px; cursor: pointer;
-  transition: 0.2s; position: relative;
-}
-.case:hover { border-color: var(--accent); box-shadow: 0 2px 12px rgba(37,99,235,0.08); }
-.case-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-.case-rank {
-  width: 24px; height: 24px; border-radius: 50%; background: var(--accent);
-  color: #fff; font-size: 11px; font-weight: 700;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
-.case-title { font-size: 14px; font-weight: 600; flex: 1; }
-.sev {
-  font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 10px;
-  text-transform: uppercase; letter-spacing: 0.04em;
-}
-.sev-high { background: var(--red-light); color: var(--red); }
-.sev-med { background: var(--secondary-light); color: var(--secondary); }
-.sev-low { background: var(--teal-light); color: var(--teal); }
-.case-why {
-  background: #f8f8f8; border-left: 3px solid var(--accent);
-  padding: 10px 14px; border-radius: 4px; margin-bottom: 12px;
-  font-size: 13px; color: var(--text-2); line-height: 1.6;
-}
-.case-why b { color: var(--text); }
-.case-metrics { display: flex; gap: 24px; margin-bottom: 14px; }
-.metric-label { font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; }
-.metric-val { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
-.metric-val.alert { color: var(--red); }
-.case-actions { display: flex; gap: 6px; }
-
-/* ---- Anomaly list (compact) ---- */
-.anomaly {
-  padding: 12px 0; border-bottom: 1px solid var(--border);
-  cursor: pointer; transition: 0.15s;
-}
-.anomaly:last-child { border-bottom: none; }
-.anomaly:hover { opacity: 0.8; }
-.anomaly-dot {
-  display: inline-block; width: 7px; height: 7px; border-radius: 50%;
-  margin-right: 8px; vertical-align: middle;
-}
-.anomaly-dot.red { background: var(--red); }
-.anomaly-dot.amber { background: var(--amber); }
-.anomaly-dot.blue { background: var(--accent); }
-.anomaly-dot.green { background: var(--green); }
-.anomaly-title { font-size: 13px; font-weight: 500; }
-.anomaly-desc { font-size: 12px; color: var(--text-3); margin-top: 2px; margin-left: 15px; }
-
-/* ---- Production page ---- */
-.prod-bar {
-  display: flex; align-items: center; gap: 6px; margin-bottom: 20px;
-}
-.prof-chip {
-  padding: 6px 14px; border: 1px solid var(--border); border-radius: 20px;
-  background: var(--surface); cursor: pointer; font-size: 12px; font-weight: 500;
-  color: var(--text-2); transition: 0.15s; white-space: nowrap;
-}
-.prof-chip:hover { border-color: #bbb; color: var(--text); }
-.prof-chip.active { border-color: var(--accent); background: var(--accent-light); color: var(--accent-dark); font-weight: 600; }
-.prof-chip .issue { font-size: 10px; margin-left: 4px; opacity: 0.7; }
-
-.prod-content {}
-.view-toggle { display: flex; gap: 0; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
-.vtab {
-  padding: 8px 16px; font-size: 13px; color: var(--text-3); cursor: pointer;
-  border-bottom: 2px solid transparent; margin-bottom: -1px; transition: 0.15s;
-}
-.vtab:hover { color: var(--text-2); }
-.vtab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
-
-/* Topology */
-.topo-wrap {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); overflow: hidden;
-}
-.topo-canvas { height: 340px; background: #fdfdfd; }
-.topo-canvas svg { width: 100%; height: 100%; }
-.topo-bar {
-  padding: 10px 16px; border-top: 1px solid var(--border);
-  display: flex; align-items: center; gap: 12px; font-size: 12px;
-}
-.topo-bar label { color: var(--text-3); }
-.topo-bar input[type=range] { width: 200px; accent-color: var(--accent); }
-.topo-bar .year { font-weight: 600; min-width: 36px; }
-
-.node-detail {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 20px; margin-top: 16px;
-}
-.node-detail h3 { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
-.kv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.kv .k { font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; }
-.kv .v { font-size: 15px; font-weight: 600; }
-
-/* Charts */
-.chart-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 20px; }
-.chart-box {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 14px;
-}
-.chart-box h4 { font-size: 11px; color: var(--text-3); font-weight: 500; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
-.chart-box canvas { width: 100% !important; height: 120px !important; }
-
-/* ---- Tables ---- */
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th {
-  text-align: left; padding: 8px 12px; font-size: 10px; font-weight: 600;
-  text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-3);
-  border-bottom: 1px solid var(--border); background: var(--bg);
-}
-td { padding: 8px 12px; border-bottom: 1px solid #f5f5f5; color: var(--text-2); }
-tr:hover td { background: #fafafa; }
-.tag {
-  display: inline-block; padding: 2px 8px; border-radius: 4px;
-  font-size: 11px; font-weight: 600;
-}
-.tag-ok { background: var(--green-light); color: var(--green); }
-.tag-warn { background: var(--amber-light); color: var(--amber); }
-.tag-err { background: var(--red-light); color: var(--red); }
-
-/* ---- Linelist ---- */
-.line-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 12px; }
-.line-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 16px 20px;
-  display: flex; align-items: center; gap: 16px; cursor: pointer; transition: 0.15s;
-}
-.line-card:hover { border-color: var(--accent); }
-.line-status { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.line-info { flex: 1; }
-.line-tag { font-size: 13px; font-weight: 600; }
-.line-sub { font-size: 11px; color: var(--text-3); }
-.line-metric { text-align: right; }
-.line-metric .val { font-size: 16px; font-weight: 700; }
-.line-metric .unit { font-size: 10px; color: var(--text-3); }
-
-/* ---- Pumps ---- */
-.pump-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-.pump-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 20px; cursor: pointer; transition: 0.15s;
-}
-.pump-card:hover { border-color: var(--accent); }
-.pump-name { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
-.pump-desc { font-size: 12px; color: var(--text-3); margin-bottom: 14px; }
-.pump-kv { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-
-/* ---- Slide panel ---- */
-.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.15); z-index: 50; display: none; }
-.overlay.open { display: block; }
-.panel {
-  position: fixed; right: -460px; top: 0; bottom: 0; width: 460px;
-  background: var(--surface); border-left: 1px solid var(--border);
-  z-index: 60; transition: right 0.25s ease; display: flex; flex-direction: column;
-}
-.panel.open { right: 0; }
-.panel-head {
-  padding: 20px 24px; border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-}
-.panel-head h3 { font-size: 15px; font-weight: 600; }
-.panel-body { flex: 1; overflow-y: auto; padding: 24px; }
-.panel-section { margin-bottom: 24px; }
-.panel-section h4 {
-  font-size: 10px; font-weight: 600; text-transform: uppercase;
-  letter-spacing: 0.06em; color: var(--text-3); margin-bottom: 10px;
-}
-.panel-kv { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.panel-kv .k { font-size: 11px; color: var(--text-3); }
-.panel-kv .v { font-size: 14px; font-weight: 600; }
-.contrib-row {
-  display: flex; justify-content: space-between; padding: 6px 0;
-  border-bottom: 1px solid #f5f5f5; font-size: 13px; color: var(--text-2);
-}
-.contrib-row:last-child { border-bottom: none; }
-.contrib-row span:last-child { font-weight: 600; color: var(--text); }
-
-/* Scrollbar */
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
-
-/* Login overlay */
+/* ======= LOGIN ======= */
 .login-overlay {
   position: fixed; inset: 0; z-index: 999;
-  background: #f5f7fa;
+  background: linear-gradient(135deg, var(--n-900) 0%, var(--p-800) 50%, var(--n-800) 100%);
   display: flex; align-items: center; justify-content: center;
 }
 .login-overlay.hidden { display: none; }
 .login-box {
-  background: #fff; border: 1px solid #e5e7eb; border-radius: 12px;
-  padding: 48px 40px; width: 360px; text-align: center;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  width: 380px; text-align: center;
 }
-.login-box .logo-big {
-  width: 56px; height: 56px; margin: 0 auto 20px;
-  background: linear-gradient(135deg, #3572b0, #1e4d7b);
-  border-radius: 14px; display: flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 22px; font-weight: 800;
+.login-logo {
+  width: 48px; height: 48px; margin: 0 auto 24px;
+  background: rgba(255,255,255,0.1); backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.15); border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 20px; font-weight: 800; letter-spacing: -0.03em;
 }
-.login-box h2 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
-.login-box p { font-size: 13px; color: #999; margin-bottom: 28px; }
+.login-box h2 { font-size: 24px; font-weight: 700; color: #fff; letter-spacing: -0.03em; margin-bottom: 4px; }
+.login-box p { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 32px; }
 .login-box input {
-  width: 100%; padding: 10px 14px; border: 1px solid #e5e7eb;
-  border-radius: 8px; font-size: 14px; text-align: center;
-  outline: none; transition: 0.2s;
+  width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12); border-radius: 10px;
+  font-size: 14px; color: #fff; text-align: center; outline: none;
+  font-family: inherit; transition: var(--transition);
 }
-.login-box input:focus { border-color: #3572b0; box-shadow: 0 0 0 3px rgba(53,114,176,0.12); }
-.login-box .login-btn {
-  width: 100%; padding: 10px; margin-top: 12px;
-  background: #3572b0; color: #fff; border: none; border-radius: 8px;
-  font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.15s;
+.login-box input::placeholder { color: rgba(255,255,255,0.3); }
+.login-box input:focus { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.12); }
+.login-btn {
+  width: 100%; padding: 12px; margin-top: 12px;
+  background: var(--p-400); color: #fff; border: none; border-radius: 10px;
+  font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+  transition: var(--transition);
 }
-.login-box .login-btn:hover { background: #1e4d7b; }
-.login-error { color: #b33b3b; font-size: 12px; margin-top: 10px; display: none; }
+.login-btn:hover { background: var(--p-300); }
+.login-error { color: var(--r-100); font-size: 12px; margin-top: 12px; display: none; }
+.login-hint { color: rgba(255,255,255,0.25); font-size: 11px; margin-top: 20px; }
+
+/* ======= LAYOUT ======= */
+.app { display: flex; height: 100vh; }
+
+/* Sidebar */
+.sidebar {
+  width: 220px; background: var(--n-900); flex-shrink: 0;
+  display: flex; flex-direction: column; padding: 0;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+.sidebar-brand {
+  padding: 24px 20px 28px; border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.sidebar-brand .logo {
+  display: flex; align-items: center; gap: 10px;
+}
+.sidebar-brand .logo-mark {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--p-400), var(--p-600));
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 14px; font-weight: 800; letter-spacing: -0.03em;
+}
+.sidebar-brand .logo-text {
+  color: #fff; font-size: 15px; font-weight: 700; letter-spacing: -0.02em;
+}
+.sidebar-brand .logo-text span {
+  display: block; color: rgba(255,255,255,0.35); font-size: 11px; font-weight: 400; margin-top: 1px;
+}
+
+.sidebar-nav { padding: 16px 12px; flex: 1; }
+.sidebar-nav a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: 8px; font-size: 13px; font-weight: 500;
+  color: rgba(255,255,255,0.5); text-decoration: none; margin-bottom: 2px;
+  transition: var(--transition);
+}
+.sidebar-nav a svg { width: 16px; height: 16px; opacity: 0.5; flex-shrink: 0; }
+.sidebar-nav a:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.06); }
+.sidebar-nav a:hover svg { opacity: 0.8; }
+.sidebar-nav a.active {
+  color: #fff; background: rgba(255,255,255,0.1); font-weight: 600;
+}
+.sidebar-nav a.active svg { opacity: 1; }
+.sidebar-nav .badge {
+  margin-left: auto; background: var(--r-400); color: #fff;
+  font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 10px;
+}
+.sidebar-nav .sep {
+  height: 1px; background: rgba(255,255,255,0.06); margin: 12px 0;
+}
+
+.sidebar-footer {
+  padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; gap: 10px;
+}
+.sidebar-footer .avatar {
+  width: 28px; height: 28px; border-radius: 50%; background: var(--p-600);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 11px; font-weight: 700;
+}
+.sidebar-footer .user-info { flex: 1; }
+.sidebar-footer .user-name { font-size: 12px; color: rgba(255,255,255,0.8); font-weight: 500; }
+.sidebar-footer .user-role { font-size: 10px; color: rgba(255,255,255,0.3); }
+
+/* Main content area */
+.main { flex: 1; overflow-y: auto; background: var(--bg); }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(245,247,249,0.85); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px; height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.topbar h1 { font-size: 15px; font-weight: 700; letter-spacing: -0.02em; }
+.topbar .actions { display: flex; gap: 8px; align-items: center; }
+.content { padding: 32px 40px; max-width: 1280px; }
+
+/* ======= BUTTONS ======= */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500;
+  border: 1px solid var(--border); background: var(--surface); color: var(--text);
+  cursor: pointer; font-family: inherit; transition: var(--transition);
+  white-space: nowrap;
+}
+.btn:hover { border-color: var(--n-200); box-shadow: var(--shadow-sm); }
+.btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); box-shadow: 0 2px 8px rgba(53,114,176,0.25); }
+.btn-ghost { border: none; background: none; color: var(--text-2); padding: 8px 12px; }
+.btn-ghost:hover { color: var(--text); background: var(--n-100); }
+.btn-sm { padding: 5px 12px; font-size: 12px; }
+.btn-xs { padding: 3px 8px; font-size: 11px; border-radius: 4px; }
+
+/* ======= PAGES ======= */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ======= DASHBOARD ======= */
+.dash-grid { display: grid; grid-template-columns: 1fr 300px; gap: 40px; }
+.dash-main { min-width: 0; }
+.dash-side { min-width: 0; }
+
+.section-label {
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-3); margin-bottom: 16px;
+}
+.section-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
+}
+.section-header h2 { font-size: 14px; font-weight: 600; color: var(--text); }
+.section-header .meta { font-size: 12px; color: var(--text-3); }
+
+/* ======= CASE CARDS (THE GOLD) ======= */
+.case-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 0; margin-bottom: 16px;
+  cursor: pointer; transition: var(--transition); overflow: hidden;
+}
+.case-card:hover {
+  border-color: var(--p-200); box-shadow: 0 4px 20px rgba(53,114,176,0.1);
+  transform: translateY(-1px);
+}
+.case-card-inner { padding: 24px 28px; }
+.case-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
+.case-rank {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--p-400); color: #fff;
+  font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.case-rank.muted { background: var(--n-300); }
+.case-info { flex: 1; }
+.case-title { font-size: 15px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 2px; }
+.case-subtitle { font-size: 12px; color: var(--text-3); }
+.severity {
+  font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+  text-transform: uppercase; letter-spacing: 0.06em; flex-shrink: 0;
+}
+.severity-high { background: var(--r-50); color: var(--r-400); }
+.severity-med { background: var(--s-50); color: var(--s-300); }
+.severity-low { background: var(--t-50); color: var(--t-300); }
+
+.case-explanation {
+  background: var(--n-25); border-left: 3px solid var(--p-200);
+  padding: 14px 18px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13px; color: var(--text-2); line-height: 1.7; margin-bottom: 20px;
+}
+.case-explanation strong { color: var(--text); font-weight: 600; }
+
+.case-metrics {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  margin: 0 -28px; padding: 0 28px;
+  border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);
+}
+.case-metric {
+  padding: 16px 0; text-align: center;
+  border-right: 1px solid var(--border-subtle);
+}
+.case-metric:last-child { border-right: none; }
+.case-metric .label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); margin-bottom: 4px; }
+.case-metric .value { font-size: 20px; font-weight: 800; letter-spacing: -0.03em; color: var(--text); }
+.case-metric .value.danger { color: var(--r-400); }
+.case-metric .value.warning { color: var(--w-300); }
+.case-metric .unit { font-size: 10px; color: var(--text-3); font-weight: 500; }
+
+.case-footer {
+  padding: 14px 28px; display: flex; gap: 8px; align-items: center;
+  background: var(--n-25);
+}
+
+/* ======= ANOMALIES ======= */
+.anomaly-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+}
+.anomaly-item {
+  padding: 14px 18px; border-bottom: 1px solid var(--border-subtle);
+  display: flex; gap: 12px; align-items: flex-start; cursor: pointer;
+  transition: var(--transition);
+}
+.anomaly-item:last-child { border-bottom: none; }
+.anomaly-item:hover { background: var(--n-25); }
+.anomaly-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px;
+}
+.anomaly-dot.red { background: var(--r-300); }
+.anomaly-dot.amber { background: var(--w-300); }
+.anomaly-dot.blue { background: var(--p-400); }
+.anomaly-dot.green { background: var(--g-300); }
+.anomaly-text { flex: 1; }
+.anomaly-text .title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.anomaly-text .desc { font-size: 12px; color: var(--text-3); line-height: 1.5; }
+
+/* ======= PRODUCTION PAGE ======= */
+.prod-toolbar {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.chip {
+  padding: 6px 16px; border: 1px solid var(--border); border-radius: 20px;
+  background: var(--surface); cursor: pointer; font-size: 12px; font-weight: 500;
+  color: var(--text-2); transition: var(--transition); white-space: nowrap;
+  font-family: inherit;
+}
+.chip:hover { border-color: var(--n-200); color: var(--text); }
+.chip.active { border-color: var(--p-400); background: var(--p-50); color: var(--p-600); font-weight: 600; }
+.chip .dot {
+  display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-left: 6px;
+}
+
+.tab-bar {
+  display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 24px;
+}
+.tab-bar.inline { border-bottom: none; margin-bottom: 0; }
+.tab {
+  padding: 10px 18px; font-size: 13px; font-weight: 500; color: var(--text-3);
+  cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: var(--transition); background: none; border-top: none; border-left: none; border-right: none;
+  font-family: inherit;
+}
+.tab:hover { color: var(--text-2); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+
+/* Topology */
+.topo-container {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); overflow: hidden;
+}
+.topo-canvas { height: 320px; background: var(--n-25); position: relative; }
+.topo-canvas svg { width: 100%; height: 100%; }
+.topo-controls {
+  padding: 12px 20px; border-top: 1px solid var(--border-subtle);
+  display: flex; align-items: center; gap: 16px; font-size: 12px;
+}
+.topo-controls label { color: var(--text-3); font-weight: 500; }
+.topo-controls input[type=range] { width: 180px; accent-color: var(--accent); }
+.topo-controls .year { font-weight: 700; min-width: 36px; color: var(--text); }
+.topo-controls select {
+  font-size: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 5px 10px; background: var(--surface); color: var(--text-2); font-family: inherit;
+}
+
+.node-inspector {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 24px; margin-top: 16px;
+}
+.node-inspector h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.node-inspector .node-type { font-size: 12px; color: var(--text-3); margin-bottom: 16px; }
+.kv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
+.kv .k { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); margin-bottom: 3px; }
+.kv .v { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; }
+
+/* Charts */
+.chart-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 20px; }
+.chart-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px;
+}
+.chart-card h4 {
+  font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--text-3); margin-bottom: 8px;
+}
+.chart-card canvas { width: 100% !important; height: 110px !important; }
+
+/* ======= TABLES ======= */
+.table-wrap {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); overflow: hidden;
+}
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+  text-align: left; padding: 12px 16px; font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3);
+  border-bottom: 1px solid var(--border); background: var(--n-25);
+}
+td { padding: 12px 16px; border-bottom: 1px solid var(--border-subtle); color: var(--text-2); }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--n-25); }
+.tag {
+  display: inline-block; padding: 3px 10px; border-radius: 20px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.03em;
+}
+.tag-ok { background: var(--g-50); color: var(--g-300); }
+.tag-warn { background: var(--w-50); color: var(--w-300); }
+.tag-err { background: var(--r-50); color: var(--r-400); }
+.tag-info { background: var(--p-50); color: var(--p-400); }
+
+/* ======= LINELIST ======= */
+.line-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 12px; }
+.line-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px 22px;
+  display: flex; align-items: center; gap: 16px; cursor: pointer;
+  transition: var(--transition);
+}
+.line-card:hover { border-color: var(--p-200); box-shadow: var(--shadow-sm); }
+.line-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.line-body { flex: 1; }
+.line-tag { font-size: 13px; font-weight: 700; letter-spacing: -0.01em; }
+.line-sub { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+.line-val { text-align: right; }
+.line-val .num { font-size: 18px; font-weight: 800; letter-spacing: -0.03em; }
+.line-val .unit { font-size: 10px; color: var(--text-3); font-weight: 500; }
+
+/* ======= PUMPS ======= */
+.pump-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.pump-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 24px; cursor: pointer;
+  transition: var(--transition);
+}
+.pump-card:hover { border-color: var(--p-200); box-shadow: var(--shadow-sm); }
+.pump-name { font-size: 16px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 2px; }
+.pump-desc { font-size: 12px; color: var(--text-3); margin-bottom: 18px; }
+.pump-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* ======= SLIDE PANEL ======= */
+.overlay { position: fixed; inset: 0; background: rgba(14,21,32,0.3); z-index: 50; display: none; backdrop-filter: blur(2px); }
+.overlay.open { display: block; }
+.panel {
+  position: fixed; right: -520px; top: 0; bottom: 0; width: 520px;
+  background: var(--surface); border-left: 1px solid var(--border);
+  z-index: 60; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex; flex-direction: column; box-shadow: var(--shadow-lg);
+}
+.panel.open { right: 0; }
+.panel-header {
+  padding: 20px 28px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.panel-header h3 { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; }
+.panel-close {
+  width: 32px; height: 32px; border-radius: 8px; border: none; background: none;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: var(--text-3); font-size: 18px; transition: var(--transition);
+}
+.panel-close:hover { background: var(--n-100); color: var(--text); }
+.panel-body { flex: 1; overflow-y: auto; padding: 28px; }
+.panel-section { margin-bottom: 28px; }
+.panel-section:last-child { margin-bottom: 0; }
+.panel-section-title {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 12px;
+}
+.panel-kv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.panel-kv .k { font-size: 11px; color: var(--text-3); font-weight: 500; }
+.panel-kv .v { font-size: 14px; font-weight: 700; margin-top: 2px; }
+.contrib-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid var(--border-subtle);
+  font-size: 13px;
+}
+.contrib-row:last-child { border-bottom: none; }
+.contrib-row .name { color: var(--text-2); }
+.contrib-row .val { font-weight: 700; color: var(--text); }
+.panel-actions { display: flex; gap: 8px; padding-top: 4px; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: var(--n-200); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--n-300); }
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .dash-grid { grid-template-columns: 1fr; }
+  .case-metrics { grid-template-columns: repeat(2, 1fr); }
+  .chart-grid { grid-template-columns: repeat(2, 1fr); }
+  .pump-grid { grid-template-columns: repeat(2, 1fr); }
+}
 </style>
 </head>
 <body>
 
-<!-- Login -->
+<!-- ======= LOGIN ======= -->
 <div class="login-overlay" id="login-overlay">
   <div class="login-box">
-    <div class="logo-big">A</div>
+    <div class="login-logo">A</div>
     <h2>ADA 3.0</h2>
-    <p>Enter access code to continue</p>
+    <p>Asset Design & Analysis Platform</p>
     <input type="password" id="login-input" placeholder="Access code" autofocus onkeydown="if(event.key==='Enter')tryLogin()">
-    <button class="login-btn" onclick="tryLogin()">Sign in</button>
-    <div class="login-error" id="login-error">Invalid access code</div>
+    <button class="login-btn" onclick="tryLogin()">Continue</button>
+    <div class="login-error" id="login-error">Invalid code</div>
+    <div class="login-hint">Hint: ada2026</div>
   </div>
 </div>
 
+<!-- ======= APP ======= -->
 <div class="app" id="app" style="display:none;">
-  <nav>
-    <div class="brand">ADA 3.0<span>Screening & Analysis</span></div>
-    <a href="#" class="active" data-page="dashboard">Dashboard <span class="count">3</span></a>
-    <a href="#" data-page="production">Production</a>
-    <a href="#" data-page="linelist">Linelist</a>
-    <a href="#" data-page="pumps">Pumps</a>
-    <a href="#" data-page="simulation">Simulation</a>
-    <div class="spacer"></div>
-    <div class="meta">SKARV FPSO</div>
-  </nav>
 
-  <main>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo">
+        <div class="logo-mark">A</div>
+        <div class="logo-text">ADA<span>SKARV FPSO</span></div>
+      </div>
+    </div>
+    <div class="sidebar-nav">
+      <a href="#" class="active" data-page="dashboard">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>
+        Dashboard <span class="badge">3</span>
+      </a>
+      <a href="#" data-page="production">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="4" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><line x1="8" y1="6" x2="4" y2="10"/><line x1="8" y1="6" x2="12" y2="10"/></svg>
+        Production
+      </a>
+      <a href="#" data-page="linelist">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="4" x2="13" y2="4"/><line x1="3" y1="8" x2="13" y2="8"/><line x1="3" y1="12" x2="13" y2="12"/></svg>
+        Linelist
+      </a>
+      <a href="#" data-page="pumps">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="5"/><path d="M8 5v6M5 8h6"/></svg>
+        Pumps
+      </a>
+      <div class="sep"></div>
+      <a href="#" data-page="simulation">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2l8 6-8 6z"/></svg>
+        Simulation
+      </a>
+    </div>
+    <div class="sidebar-footer">
+      <div class="avatar">YS</div>
+      <div class="user-info">
+        <div class="user-name">Yann S-K</div>
+        <div class="user-role">Process Engineer</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+
     <!-- ===== DASHBOARD ===== -->
     <div class="page active" id="page-dashboard">
       <div class="topbar">
         <h1>Dashboard</h1>
         <div class="actions">
-          <button class="btn btn-accent btn-sm">Run Screening</button>
+          <button class="btn btn-sm btn-ghost">Export</button>
+          <button class="btn btn-sm btn-primary">Run Screening</button>
         </div>
       </div>
       <div class="content">
-        <div class="dash">
+        <div class="dash-grid">
           <div class="dash-main">
-            <div class="section-head">
+            <div class="section-header">
               <h2>Top Ranked Cases</h2>
-              <span class="sub">Auto-screened across all profiles</span>
+              <span class="meta">Auto-screened · 3 profiles · 19 sim cases</span>
             </div>
 
             <!-- Case 1 -->
-            <div class="case" onclick="openPanel('case1')">
-              <div class="case-top">
-                <div class="case-rank">1</div>
-                <div class="case-title">HP Separator — Peak Load</div>
-                <span class="sev sev-high">High</span>
+            <div class="case-card" onclick="openPanel('case1')">
+              <div class="case-card-inner">
+                <div class="case-header">
+                  <div class="case-rank">1</div>
+                  <div class="case-info">
+                    <div class="case-title">HP Separator — Peak Load</div>
+                    <div class="case-subtitle">Profile A20 · 2031-06-15</div>
+                  </div>
+                  <span class="severity severity-high">High</span>
+                </div>
+                <div class="case-explanation">
+                  <strong>Why:</strong> HP Separator gas flow reached <strong>3.2 MSm³/d</strong> — 18% above design envelope (2.7M). Combined N3 + N6 riser output after routing change moved wells A05–A06 to N6.
+                </div>
+                <div class="case-metrics">
+                  <div class="case-metric"><div class="label">Gas Flow</div><div class="value danger">3.2M</div><div class="unit">Sm³/d</div></div>
+                  <div class="case-metric"><div class="label">Oil Flow</div><div class="value">285</div><div class="unit">Sm³/d</div></div>
+                  <div class="case-metric"><div class="label">Water Cut</div><div class="value">0.42</div></div>
+                  <div class="case-metric"><div class="label">ΔP</div><div class="value">0.83</div><div class="unit">bar</div></div>
+                </div>
               </div>
-              <div class="case-why">
-                <b>Why:</b> HP Separator reached 3.2 MSm3/d on 2031-06-15 — 18% above design envelope. Driven by combined output from N3 and N6 Risers after routing change.
-              </div>
-              <div class="case-metrics">
-                <div><div class="metric-label">Gas Flow</div><div class="metric-val alert">3.2M</div></div>
-                <div><div class="metric-label">Oil Flow</div><div class="metric-val">285</div></div>
-                <div><div class="metric-label">Water Cut</div><div class="metric-val">0.42</div></div>
-                <div><div class="metric-label">Date</div><div class="metric-val" style="font-size:14px">2031-06-15</div></div>
-              </div>
-              <div class="case-actions">
-                <button class="btn btn-accent btn-sm" onclick="event.stopPropagation()">Add to Simulation</button>
-                <button class="btn btn-sm" onclick="event.stopPropagation(); navigateTo('production')">Topology</button>
+              <div class="case-footer">
+                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation()">Add to Simulation</button>
+                <button class="btn btn-sm" onclick="event.stopPropagation(); navigateTo('production'); setTimeout(()=>selectNode('hp'),200)">View in Topology</button>
               </div>
             </div>
 
             <!-- Case 2 -->
-            <div class="case" onclick="openPanel('case2')">
-              <div class="case-top">
-                <div class="case-rank">2</div>
-                <div class="case-title">W4 Riser — Velocity Exceedance</div>
-                <span class="sev sev-high">High</span>
+            <div class="case-card" onclick="openPanel('case2')">
+              <div class="case-card-inner">
+                <div class="case-header">
+                  <div class="case-rank">2</div>
+                  <div class="case-info">
+                    <div class="case-title">W4 Riser — Velocity Exceedance</div>
+                    <div class="case-subtitle">Profile A20 · 2032-01-10</div>
+                  </div>
+                  <span class="severity severity-high">High</span>
+                </div>
+                <div class="case-explanation">
+                  <strong>Why:</strong> Velocity hit <strong>43.2 m/s</strong> (limit: 40). Rerouted wells from W7 during maintenance concentrated flow through W4.
+                </div>
+                <div class="case-metrics">
+                  <div class="case-metric"><div class="label">Velocity</div><div class="value danger">43.2</div><div class="unit">m/s</div></div>
+                  <div class="case-metric"><div class="label">Vol Flow</div><div class="value">5,496</div><div class="unit">m³/h</div></div>
+                  <div class="case-metric"><div class="label">ρv²</div><div class="value">27,973</div></div>
+                  <div class="case-metric"><div class="label">Mix Dens</div><div class="value">34.0</div><div class="unit">kg/m³</div></div>
+                </div>
               </div>
-              <div class="case-why">
-                <b>Why:</b> W4 Riser velocity hit 43.2 m/s on 2032-01-10 (limit: 40). Caused by rerouting wells from W7 Riser during maintenance.
-              </div>
-              <div class="case-metrics">
-                <div><div class="metric-label">Velocity</div><div class="metric-val alert">43.2</div></div>
-                <div><div class="metric-label">Volume Flow</div><div class="metric-val">5,496</div></div>
-                <div><div class="metric-label">Mix Density</div><div class="metric-val">34.0</div></div>
-                <div><div class="metric-label">Date</div><div class="metric-val" style="font-size:14px">2032-01-10</div></div>
-              </div>
-              <div class="case-actions">
-                <button class="btn btn-accent btn-sm" onclick="event.stopPropagation()">Add to Simulation</button>
-                <button class="btn btn-sm" onclick="event.stopPropagation(); navigateTo('production')">Topology</button>
+              <div class="case-footer">
+                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation()">Add to Simulation</button>
+                <button class="btn btn-sm" onclick="event.stopPropagation(); navigateTo('production'); setTimeout(()=>selectNode('w4'),200)">View in Topology</button>
               </div>
             </div>
 
             <!-- Case 3 -->
-            <div class="case" onclick="openPanel('case3')">
-              <div class="case-top">
-                <div class="case-rank">3</div>
-                <div class="case-title">LP Separator — Liquid Surge</div>
-                <span class="sev sev-med">Medium</span>
+            <div class="case-card" onclick="openPanel('case3')">
+              <div class="case-card-inner">
+                <div class="case-header">
+                  <div class="case-rank">3</div>
+                  <div class="case-info">
+                    <div class="case-title">LP Separator — Liquid Surge</div>
+                    <div class="case-subtitle">Profile A21 · 2033-09-22</div>
+                  </div>
+                  <span class="severity severity-med">Medium</span>
+                </div>
+                <div class="case-explanation">
+                  <strong>Why:</strong> Liquid flow spiked to <strong>2,800 Sm³/d</strong>. Water cut increase on E2 Riser + new well tie-in on N6.
+                </div>
+                <div class="case-metrics">
+                  <div class="case-metric"><div class="label">Liquid</div><div class="value warning">2,800</div><div class="unit">Sm³/d</div></div>
+                  <div class="case-metric"><div class="label">Pressure</div><div class="value">29.5</div><div class="unit">bar</div></div>
+                  <div class="case-metric"><div class="label">Temp</div><div class="value">52</div><div class="unit">°C</div></div>
+                  <div class="case-metric"><div class="label">Water Cut</div><div class="value">0.68</div></div>
+                </div>
               </div>
-              <div class="case-why">
-                <b>Why:</b> LP Separator liquid flow spiked to 2,800 Sm3/d on 2033-09-22. Water cut increase on E2 Riser + new well tie-in on N6.
-              </div>
-              <div class="case-metrics">
-                <div><div class="metric-label">Liquid Flow</div><div class="metric-val" style="color:var(--amber)">2,800</div></div>
-                <div><div class="metric-label">Pressure</div><div class="metric-val">29.5</div></div>
-                <div><div class="metric-label">Temp</div><div class="metric-val">52</div></div>
-                <div><div class="metric-label">Date</div><div class="metric-val" style="font-size:14px">2033-09-22</div></div>
-              </div>
-              <div class="case-actions">
-                <button class="btn btn-accent btn-sm" onclick="event.stopPropagation()">Add to Simulation</button>
+              <div class="case-footer">
+                <button class="btn btn-sm btn-primary" onclick="event.stopPropagation()">Add to Simulation</button>
               </div>
             </div>
 
             <!-- Case 4 -->
-            <div class="case">
-              <div class="case-top">
-                <div class="case-rank" style="background:var(--text-3)">4</div>
-                <div class="case-title">N3 Riser — Routing Change</div>
-                <span class="sev sev-low">Low</span>
-              </div>
-              <div class="case-why">
-                <b>Why:</b> Routing change on 2034-03-01. N3 Riser now receives 2 additional wells — new dominant load path to HP Separator.
-              </div>
-              <div class="case-metrics">
-                <div><div class="metric-label">Wells</div><div class="metric-val">6</div></div>
-                <div><div class="metric-label">Delta Gas</div><div class="metric-val">+0.4M</div></div>
-                <div><div class="metric-label">Date</div><div class="metric-val" style="font-size:14px">2034-03-01</div></div>
+            <div class="case-card">
+              <div class="case-card-inner">
+                <div class="case-header">
+                  <div class="case-rank muted">4</div>
+                  <div class="case-info">
+                    <div class="case-title">N3 Riser — Routing Change</div>
+                    <div class="case-subtitle">Profile A20 · 2034-03-01</div>
+                  </div>
+                  <span class="severity severity-low">Low</span>
+                </div>
+                <div class="case-explanation">
+                  <strong>Why:</strong> N3 receives 2 additional wells — new dominant load path to HP Separator. Gas delta +0.4M Sm³/d.
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Sidebar: anomalies -->
+          <!-- Anomalies sidebar -->
           <div class="dash-side">
-            <div class="section-head">
+            <div class="section-header" style="margin-bottom:12px">
               <h2>Anomalies</h2>
-              <span class="sub">3 active</span>
+              <span class="meta">3 active</span>
             </div>
-            <div class="anomaly">
-              <span class="anomaly-dot red"></span>
-              <span class="anomaly-title">Disconnected node</span>
-              <div class="anomaly-desc">Well J04 not connected to any riser in A21 & A22</div>
-            </div>
-            <div class="anomaly">
-              <span class="anomaly-dot red"></span>
-              <span class="anomaly-title">Routing goes nowhere</span>
-              <div class="anomaly-desc">Riser E2 unmapped after 2035-01-01 in A24</div>
-            </div>
-            <div class="anomaly">
-              <span class="anomaly-dot amber"></span>
-              <span class="anomaly-title">Design exceedance</span>
-              <div class="anomaly-desc">HP Sep gas > design on 6 dates in A20</div>
-            </div>
-            <div class="anomaly">
-              <span class="anomaly-dot blue"></span>
-              <span class="anomaly-title">Topology changes</span>
-              <div class="anomaly-desc">3 routing changes 2033–2035 in A20</div>
-            </div>
-            <div class="anomaly">
-              <span class="anomaly-dot green"></span>
-              <span class="anomaly-title">LP Sep within limits</span>
-              <div class="anomaly-desc">All A24 cases OK — no action</div>
+            <div class="anomaly-card">
+              <div class="anomaly-item">
+                <div class="anomaly-dot red"></div>
+                <div class="anomaly-text">
+                  <div class="title">Disconnected node</div>
+                  <div class="desc">Well J04 not connected to any riser in A21 & A22</div>
+                </div>
+              </div>
+              <div class="anomaly-item">
+                <div class="anomaly-dot red"></div>
+                <div class="anomaly-text">
+                  <div class="title">Routing goes nowhere</div>
+                  <div class="desc">Riser E2 unmapped after 2035-01-01 in A24</div>
+                </div>
+              </div>
+              <div class="anomaly-item">
+                <div class="anomaly-dot amber"></div>
+                <div class="anomaly-text">
+                  <div class="title">Design exceedance</div>
+                  <div class="desc">HP Sep gas > design on 6 dates in A20</div>
+                </div>
+              </div>
+              <div class="anomaly-item">
+                <div class="anomaly-dot blue"></div>
+                <div class="anomaly-text">
+                  <div class="title">Topology changes</div>
+                  <div class="desc">3 routing changes 2033–2035 in A20</div>
+                </div>
+              </div>
+              <div class="anomaly-item">
+                <div class="anomaly-dot green"></div>
+                <div class="anomaly-text">
+                  <div class="title">LP Sep within limits</div>
+                  <div class="desc">All A24 cases pass — no action needed</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -485,91 +687,95 @@ tr:hover td { background: #fafafa; }
     <div class="page" id="page-production">
       <div class="topbar">
         <h1>Production Profiles</h1>
+        <div class="actions">
+          <button class="btn btn-sm btn-ghost">Upload Profile</button>
+        </div>
       </div>
       <div class="content">
-        <div class="prod-bar">
-          <span style="font-size:12px; color:var(--text-3); margin-right:4px;">Profile:</span>
-          <button class="prof-chip active" onclick="selectProfile(this)">A20<span class="issue" style="color:var(--red)">2</span></button>
-          <button class="prof-chip" onclick="selectProfile(this)">A21 &amp; A22<span class="issue" style="color:var(--secondary)">1</span></button>
-          <button class="prof-chip" onclick="selectProfile(this)">A24</button>
+        <div class="prod-toolbar">
+          <button class="chip active" onclick="selectProfile(this)">A20 <span class="dot" style="background:var(--r-300)"></span></button>
+          <button class="chip" onclick="selectProfile(this)">A21 & A22 <span class="dot" style="background:var(--w-300)"></span></button>
+          <button class="chip" onclick="selectProfile(this)">A24</button>
           <div style="flex:1"></div>
-          <div class="view-toggle" style="margin-bottom:0; border-bottom:none;">
-            <div class="vtab active" data-vt="topo" onclick="switchView(this)">Topology</div>
-            <div class="vtab" data-vt="cases" onclick="switchView(this)">Cases</div>
-            <div class="vtab" data-vt="data" onclick="switchView(this)">Data</div>
+          <div class="tab-bar inline">
+            <button class="tab active" data-vt="topo" onclick="switchView(this)">Topology</button>
+            <button class="tab" data-vt="cases" onclick="switchView(this)">Cases</button>
+            <button class="tab" data-vt="data" onclick="switchView(this)">Data</button>
           </div>
         </div>
 
-            <!-- Topology view -->
-            <div class="view-content" id="view-topo">
-              <div class="topo-wrap">
-                <div class="topo-canvas"><svg id="topo-svg" width="100%" height="100%"></svg></div>
-                <div class="topo-bar">
-                  <label>Timeline</label>
-                  <input type="range" min="2025" max="2040" value="2031" oninput="document.getElementById('yr').textContent=this.value">
-                  <span class="year" id="yr">2031</span>
-                  <div style="flex:1"></div>
-                  <select style="font-size:12px; border:1px solid var(--border); border-radius:4px; padding:3px 8px;">
-                    <option>Full network</option>
-                    <option>Separators only</option>
-                    <option>Highlight anomalies</option>
-                  </select>
-                </div>
-              </div>
-              <div class="node-detail" id="node-detail">
-                <div style="text-align:center; color:var(--text-3); font-size:13px; padding:12px;">Click a node to inspect</div>
-              </div>
-              <div class="chart-row">
-                <div class="chart-box"><h4>Gas flow</h4><canvas id="c-gas"></canvas></div>
-                <div class="chart-box"><h4>Oil flow</h4><canvas id="c-oil"></canvas></div>
-                <div class="chart-box"><h4>Water flow</h4><canvas id="c-water"></canvas></div>
-                <div class="chart-box"><h4>Temperature</h4><canvas id="c-temp"></canvas></div>
-              </div>
+        <!-- Topology -->
+        <div class="view-content" id="view-topo">
+          <div class="topo-container">
+            <div class="topo-canvas"><svg id="topo-svg" width="100%" height="100%"></svg></div>
+            <div class="topo-controls">
+              <label>Timeline</label>
+              <input type="range" min="2025" max="2040" value="2031" oninput="document.getElementById('yr').textContent=this.value">
+              <span class="year" id="yr">2031</span>
+              <div style="flex:1"></div>
+              <select>
+                <option>Full network</option>
+                <option>Separators only</option>
+                <option>Highlight anomalies</option>
+              </select>
             </div>
+          </div>
+          <div class="node-inspector" id="node-detail">
+            <div style="text-align:center; color:var(--text-3); font-size:13px; padding:8px;">Click a node in the topology to inspect</div>
+          </div>
+          <div class="chart-grid">
+            <div class="chart-card"><h4>Gas Flow</h4><canvas id="c-gas"></canvas></div>
+            <div class="chart-card"><h4>Oil Flow</h4><canvas id="c-oil"></canvas></div>
+            <div class="chart-card"><h4>Water Flow</h4><canvas id="c-water"></canvas></div>
+            <div class="chart-card"><h4>Temperature</h4><canvas id="c-temp"></canvas></div>
+          </div>
+        </div>
 
-            <!-- Screened cases view -->
-            <div class="view-content" id="view-cases" style="display:none;">
-              <div class="case" onclick="openPanel('case1')">
-                <div class="case-top">
-                  <div class="case-rank">1</div>
-                  <div class="case-title">HP Separator — Peak Load</div>
-                  <span class="sev sev-high">High</span>
-                </div>
-                <div class="case-why"><b>Why:</b> Gas flow 3.2 MSm3/d on 2031-06-15 — 18% above design.</div>
-                <div class="case-actions">
-                  <button class="btn btn-accent btn-sm" onclick="event.stopPropagation()">Add to Sim</button>
-                  <button class="btn btn-sm" onclick="event.stopPropagation()">Drill Down</button>
-                </div>
+        <!-- Cases -->
+        <div class="view-content" id="view-cases" style="display:none">
+          <div class="case-card" onclick="openPanel('case1')">
+            <div class="case-card-inner">
+              <div class="case-header">
+                <div class="case-rank">1</div>
+                <div class="case-info"><div class="case-title">HP Separator — Peak Load</div><div class="case-subtitle">2031-06-15</div></div>
+                <span class="severity severity-high">High</span>
               </div>
-              <div class="case">
-                <div class="case-top">
-                  <div class="case-rank">2</div>
-                  <div class="case-title">W4 Riser — Velocity Exceedance</div>
-                  <span class="sev sev-high">High</span>
-                </div>
-                <div class="case-why"><b>Why:</b> 43.2 m/s on 2032-01-10. Rerouted wells from W7.</div>
-                <div class="case-actions"><button class="btn btn-accent btn-sm" onclick="event.stopPropagation()">Add to Sim</button></div>
-              </div>
+              <div class="case-explanation"><strong>Why:</strong> Gas flow 3.2 MSm³/d — 18% above design.</div>
             </div>
-
-            <!-- Data view -->
-            <div class="view-content" id="view-data" style="display:none;">
-              <div style="overflow-x:auto;">
-                <table>
-                  <thead>
-                    <tr><th>Case</th><th>Phase</th><th>Temp</th><th>Press</th><th>GVF</th><th>WC</th><th>Mass Flow</th><th>Vol Flow</th><th>RhoV2</th><th>P Loss</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr><td>1.1.2027</td><td>Gas</td><td>25.0</td><td>29.5</td><td>0.995</td><td>0.08</td><td>187,076</td><td>5,496</td><td>27,973</td><td>0.83</td></tr>
-                    <tr><td>1.1.2029</td><td>Gas</td><td>25.0</td><td>29.5</td><td>0.995</td><td>0.08</td><td>182,645</td><td>5,365</td><td>26,660</td><td>0.79</td></tr>
-                    <tr><td>1.1.2031</td><td>Gas</td><td>25.0</td><td>29.5</td><td>0.995</td><td>0.09</td><td>166,357</td><td>5,006</td><td>22,666</td><td>0.67</td></tr>
-                    <tr><td>1.1.2033</td><td>Gas</td><td>25.0</td><td>29.5</td><td>0.996</td><td>0.07</td><td>155,779</td><td>4,670</td><td>19,921</td><td>0.59</td></tr>
-                    <tr><td>1.1.2035</td><td>Gas</td><td>25.0</td><td>29.5</td><td>0.996</td><td>0.06</td><td>139,143</td><td>4,199</td><td>15,936</td><td>0.47</td></tr>
-                  </tbody>
-                </table>
-              </div>
+            <div class="case-footer">
+              <button class="btn btn-sm btn-primary" onclick="event.stopPropagation()">Add to Sim</button>
             </div>
+          </div>
+          <div class="case-card">
+            <div class="case-card-inner">
+              <div class="case-header">
+                <div class="case-rank">2</div>
+                <div class="case-info"><div class="case-title">W4 Riser — Velocity Exceedance</div><div class="case-subtitle">2032-01-10</div></div>
+                <span class="severity severity-high">High</span>
+              </div>
+              <div class="case-explanation"><strong>Why:</strong> 43.2 m/s — limit 40 m/s. Rerouted wells from W7.</div>
+            </div>
+            <div class="case-footer">
+              <button class="btn btn-sm btn-primary" onclick="event.stopPropagation()">Add to Sim</button>
+            </div>
+          </div>
+        </div>
 
+        <!-- Data -->
+        <div class="view-content" id="view-data" style="display:none">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Case</th><th>Phase</th><th>Temp</th><th>Press</th><th>GVF</th><th>WC</th><th>Mass Flow</th><th>Vol Flow</th><th>ρv²</th><th>ΔP</th></tr></thead>
+              <tbody>
+                <tr><td style="font-weight:600">1.1.2027</td><td>Gas</td><td>25.0</td><td>29.5</td><td>0.995</td><td>0.08</td><td>187,076</td><td>5,496</td><td>27,973</td><td>0.83</td></tr>
+                <tr><td style="font-weight:600">1.1.2029</td><td>Gas</td><td>25.0</td><td>29.5</td><td>0.995</td><td>0.08</td><td>182,645</td><td>5,365</td><td>26,660</td><td>0.79</td></tr>
+                <tr><td style="font-weight:600">1.1.2031</td><td>Gas</td><td>25.0</td><td>29.5</td><td>0.995</td><td>0.09</td><td>166,357</td><td>5,006</td><td>22,666</td><td>0.67</td></tr>
+                <tr><td style="font-weight:600">1.1.2033</td><td>Gas</td><td>25.0</td><td>29.5</td><td>0.996</td><td>0.07</td><td>155,779</td><td>4,670</td><td>19,921</td><td>0.59</td></tr>
+                <tr><td style="font-weight:600">1.1.2035</td><td>Gas</td><td>25.0</td><td>29.5</td><td>0.996</td><td>0.06</td><td>139,143</td><td>4,199</td><td>15,936</td><td>0.47</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -577,66 +783,69 @@ tr:hover td { background: #fafafa; }
     <div class="page" id="page-linelist">
       <div class="topbar">
         <h1>Process Linelist</h1>
-        <div class="actions"><button class="btn btn-accent btn-sm">Auto Size</button></div>
+        <div class="actions">
+          <button class="btn btn-sm">Edit Criteria</button>
+          <button class="btn btn-sm btn-primary">Auto Size</button>
+        </div>
       </div>
       <div class="content">
-        <div class="section-head">
+        <div class="section-header">
           <h2>Lines</h2>
-          <span class="sub">4 pass &middot; 1 marginal</span>
+          <span class="meta">4 sized · 1 marginal · 1 unconfigured</span>
         </div>
-        <div class="line-cards">
+        <div class="line-grid">
           <div class="line-card" onclick="openPanel('line1')">
-            <div class="line-status" style="background:var(--amber)"></div>
-            <div class="line-info">
+            <div class="line-dot" style="background:var(--w-300)"></div>
+            <div class="line-body">
               <div class="line-tag">23-L-X001-BD20-10</div>
-              <div class="line-sub">DN10 &middot; Sys 23 &middot; PV</div>
+              <div class="line-sub">DN10 · Sys 23 · PV · 53.6m</div>
             </div>
-            <div class="line-metric">
-              <div class="val" style="color:var(--amber)">38.5</div>
+            <div class="line-val">
+              <div class="num" style="color:var(--w-300)">38.5</div>
               <div class="unit">m/s peak</div>
             </div>
           </div>
           <div class="line-card" onclick="openPanel('line2')">
-            <div class="line-status" style="background:var(--green)"></div>
-            <div class="line-info">
+            <div class="line-dot" style="background:var(--g-300)"></div>
+            <div class="line-body">
               <div class="line-tag">23-L-X002-GD20-18</div>
-              <div class="line-sub">DN18 &middot; Sys 23 &middot; PV</div>
+              <div class="line-sub">DN18 · Sys 23 · PV · 12.7m</div>
             </div>
-            <div class="line-metric">
-              <div class="val">24.2</div>
+            <div class="line-val">
+              <div class="num">24.2</div>
               <div class="unit">m/s peak</div>
             </div>
           </div>
           <div class="line-card">
-            <div class="line-status" style="background:var(--green)"></div>
-            <div class="line-info">
+            <div class="line-dot" style="background:var(--g-300)"></div>
+            <div class="line-body">
               <div class="line-tag">20-L-X003-BD20-6</div>
-              <div class="line-sub">DN6 &middot; Sys 20 &middot; PL</div>
+              <div class="line-sub">DN6 · Sys 20 · PL · 25.4m</div>
             </div>
-            <div class="line-metric">
-              <div class="val">18.7</div>
+            <div class="line-val">
+              <div class="num">18.7</div>
               <div class="unit">m/s peak</div>
             </div>
           </div>
           <div class="line-card">
-            <div class="line-status" style="background:var(--green)"></div>
-            <div class="line-info">
+            <div class="line-dot" style="background:var(--g-300)"></div>
+            <div class="line-body">
               <div class="line-tag">L-X004</div>
-              <div class="line-sub">DN20 &middot; BD20</div>
+              <div class="line-sub">DN20 · BD20</div>
             </div>
-            <div class="line-metric">
-              <div class="val">15.3</div>
+            <div class="line-val">
+              <div class="num">15.3</div>
               <div class="unit">m/s peak</div>
             </div>
           </div>
           <div class="line-card">
-            <div class="line-status" style="background:#ddd"></div>
-            <div class="line-info">
+            <div class="line-dot" style="background:var(--n-200)"></div>
+            <div class="line-body">
               <div class="line-tag">L-X005</div>
               <div class="line-sub">Not configured</div>
             </div>
-            <div class="line-metric">
-              <div class="val" style="color:var(--text-3)">—</div>
+            <div class="line-val">
+              <div class="num" style="color:var(--text-3)">—</div>
             </div>
           </div>
         </div>
@@ -645,37 +854,42 @@ tr:hover td { background: #fafafa; }
 
     <!-- ===== PUMPS ===== -->
     <div class="page" id="page-pumps">
-      <div class="topbar"><h1>Pumps</h1></div>
+      <div class="topbar">
+        <h1>Pumps</h1>
+        <div class="actions">
+          <button class="btn btn-sm">Download Datasheet</button>
+        </div>
+      </div>
       <div class="content">
-        <div class="pump-cards">
+        <div class="pump-grid">
           <div class="pump-card" onclick="openPanel('pump1')">
             <div class="pump-name">24-PA-X001</div>
-            <div class="pump-desc">NGL Pump &middot; SKARV FPSO</div>
-            <div class="pump-kv">
+            <div class="pump-desc">NGL Pump · System 24</div>
+            <div class="pump-stats">
               <div class="kv"><div class="k">Power</div><div class="v">23–33 kW</div></div>
-              <div class="kv"><div class="k">Max Flow</div><div class="v">56.1 m3/h</div></div>
+              <div class="kv"><div class="k">Max Flow</div><div class="v">56.1 m³/h</div></div>
               <div class="kv"><div class="k">NPSH</div><div class="v">354–356</div></div>
-              <div class="kv"><div class="k">Status</div><div class="v" style="color:var(--green)">OK</div></div>
+              <div class="kv"><div class="k">Status</div><div class="v" style="color:var(--g-300)">OK</div></div>
             </div>
           </div>
           <div class="pump-card" onclick="openPanel('pump2')">
             <div class="pump-name">20-PA-X002</div>
-            <div class="pump-desc">Oil Export Pump &middot; SKARV FPSO</div>
-            <div class="pump-kv">
+            <div class="pump-desc">Oil Export Pump · System 20</div>
+            <div class="pump-stats">
               <div class="kv"><div class="k">Power</div><div class="v">45–63 kW</div></div>
-              <div class="kv"><div class="k">Max Flow</div><div class="v">112 m3/h</div></div>
+              <div class="kv"><div class="k">Max Flow</div><div class="v">112 m³/h</div></div>
               <div class="kv"><div class="k">Diff Head</div><div class="v">420–445</div></div>
-              <div class="kv"><div class="k">Status</div><div class="v" style="color:var(--amber)">Review</div></div>
+              <div class="kv"><div class="k">Status</div><div class="v" style="color:var(--w-300)">Review</div></div>
             </div>
           </div>
           <div class="pump-card">
             <div class="pump-name">23-PA-X003</div>
-            <div class="pump-desc">LP Scrubber Pump &middot; SKARV FPSO</div>
-            <div class="pump-kv">
+            <div class="pump-desc">LP Scrubber Pump · System 23</div>
+            <div class="pump-stats">
               <div class="kv"><div class="k">Power</div><div class="v">12–19 kW</div></div>
-              <div class="kv"><div class="k">Max Flow</div><div class="v">38.7 m3/h</div></div>
+              <div class="kv"><div class="k">Max Flow</div><div class="v">38.7 m³/h</div></div>
               <div class="kv"><div class="k">Diff Head</div><div class="v">280–295</div></div>
-              <div class="kv"><div class="k">Status</div><div class="v" style="color:var(--green)">OK</div></div>
+              <div class="kv"><div class="k">Status</div><div class="v" style="color:var(--g-300)">OK</div></div>
             </div>
           </div>
         </div>
@@ -686,35 +900,41 @@ tr:hover td { background: #fafafa; }
     <div class="page" id="page-simulation">
       <div class="topbar">
         <h1>Simulation Queue</h1>
-        <div class="actions"><button class="btn btn-accent btn-sm">Run All</button></div>
+        <div class="actions">
+          <button class="btn btn-sm">Clear All</button>
+          <button class="btn btn-sm btn-primary">Run Selected</button>
+        </div>
       </div>
       <div class="content">
-        <table>
-          <thead><tr><th></th><th>Case</th><th>Profile</th><th>Date</th><th>Asset</th><th>Trigger</th><th>Severity</th></tr></thead>
-          <tbody>
-            <tr><td><input type="checkbox" checked></td><td style="font-weight:600">SIM-001</td><td>A20</td><td>2031-06-15</td><td>HP Separator</td><td>Peak gas flow</td><td><span class="tag tag-err">High</span></td></tr>
-            <tr><td><input type="checkbox" checked></td><td style="font-weight:600">SIM-002</td><td>A20</td><td>2032-01-10</td><td>W4 Riser</td><td>Velocity exceedance</td><td><span class="tag tag-err">High</span></td></tr>
-            <tr><td><input type="checkbox" checked></td><td style="font-weight:600">SIM-003</td><td>A21</td><td>2033-09-22</td><td>LP Separator</td><td>Liquid surge</td><td><span class="tag tag-warn">Medium</span></td></tr>
-            <tr><td><input type="checkbox"></td><td style="font-weight:600">SIM-004</td><td>A20</td><td>2034-03-01</td><td>N3 Riser</td><td>Routing change</td><td><span class="tag" style="background:var(--accent-light);color:var(--accent)">Low</span></td></tr>
-          </tbody>
-        </table>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th style="width:40px"></th><th>Case</th><th>Profile</th><th>Date</th><th>Asset</th><th>Trigger</th><th>Severity</th></tr></thead>
+            <tbody>
+              <tr><td><input type="checkbox" checked></td><td style="font-weight:700">SIM-001</td><td>A20</td><td>2031-06-15</td><td>HP Separator</td><td>Peak gas flow</td><td><span class="tag tag-err">High</span></td></tr>
+              <tr><td><input type="checkbox" checked></td><td style="font-weight:700">SIM-002</td><td>A20</td><td>2032-01-10</td><td>W4 Riser</td><td>Velocity exceedance</td><td><span class="tag tag-err">High</span></td></tr>
+              <tr><td><input type="checkbox" checked></td><td style="font-weight:700">SIM-003</td><td>A21</td><td>2033-09-22</td><td>LP Separator</td><td>Liquid surge</td><td><span class="tag tag-warn">Medium</span></td></tr>
+              <tr><td><input type="checkbox"></td><td style="font-weight:700">SIM-004</td><td>A20</td><td>2034-03-01</td><td>N3 Riser</td><td>Routing change</td><td><span class="tag tag-info">Low</span></td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </main>
+
+  </div>
 </div>
 
-<!-- Slide panel -->
+<!-- ======= SLIDE PANEL ======= -->
 <div class="overlay" id="overlay" onclick="closePanel()"></div>
 <div class="panel" id="panel">
-  <div class="panel-head">
+  <div class="panel-header">
     <h3 id="panel-title">Details</h3>
-    <button class="btn-ghost" onclick="closePanel()" style="font-size:20px; cursor:pointer; border:none; background:none;">&times;</button>
+    <button class="panel-close" onclick="closePanel()">×</button>
   </div>
   <div class="panel-body" id="panel-body"></div>
 </div>
 
 <script>
-// Login
+// ======= LOGIN =======
 function tryLogin() {
   const code = document.getElementById('login-input').value;
   if (code === 'ada2026') {
@@ -727,154 +947,162 @@ function tryLogin() {
   }
 }
 
-// Navigation
-document.querySelectorAll('nav a').forEach(a => {
-  a.addEventListener('click', e => {
-    e.preventDefault();
-    navigateTo(a.dataset.page);
-  });
+// ======= NAVIGATION =======
+document.querySelectorAll('.sidebar-nav a').forEach(a => {
+  a.addEventListener('click', e => { e.preventDefault(); navigateTo(a.dataset.page); });
 });
 
 function navigateTo(page) {
-  document.querySelectorAll('nav a').forEach(a => a.classList.toggle('active', a.dataset.page === page));
+  document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.toggle('active', a.dataset.page === page));
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + page));
-  if (page === 'production') setTimeout(() => { drawTopo(); initCharts(); }, 50);
+  if (page === 'production') setTimeout(() => { drawTopo(); initCharts(); }, 80);
 }
 
-// Profile selector
+// ======= PROFILE CHIPS =======
 function selectProfile(el) {
-  document.querySelectorAll('.prof-chip').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.chip').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
 }
 
-// View toggle
+// ======= VIEW TABS =======
 function switchView(el) {
-  document.querySelectorAll('.vtab').forEach(t => t.classList.remove('active'));
+  el.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.view-content').forEach(c => c.style.display = 'none');
   el.classList.add('active');
   document.getElementById('view-' + el.dataset.vt).style.display = 'block';
 }
 
-// Topology
+// ======= TOPOLOGY =======
 function drawTopo() {
   const svg = document.getElementById('topo-svg');
   if (!svg) return;
   const W = svg.parentElement.getBoundingClientRect().width || 700;
-  const H = 340;
+  const H = 320;
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
 
   const nodes = [
-    { id:'export', l:'Export', x:W*.5, y:28, r:12, c:'#1e4d7b' },
-    { id:'total', l:'Total', x:W*.5, y:75, r:14, c:'#3572b0' },
-    { id:'hp', l:'HP Sep', x:W*.35, y:140, r:13, c:'#d07030' },
-    { id:'lp', l:'LP Sep', x:W*.65, y:140, r:13, c:'#d07030' },
-    { id:'n3', l:'N3', x:W*.1, y:210, r:10, c:'#3a8888' },
-    { id:'n6', l:'N6', x:W*.22, y:210, r:10, c:'#3a8888' },
-    { id:'w4', l:'W4', x:W*.34, y:210, r:10, c:'#b33b3b', anom:true },
-    { id:'w7', l:'W7', x:W*.46, y:210, r:10, c:'#3a8888' },
-    { id:'e1', l:'E1', x:W*.58, y:210, r:10, c:'#3a8888' },
-    { id:'e2', l:'E2', x:W*.7, y:210, r:10, c:'#3a8888' },
-    { id:'n8', l:'N8', x:W*.82, y:210, r:10, c:'#3a8888' },
+    { id:'export', l:'Export Pipeline', x:W*.5, y:24, r:10, c:'#153a5e' },
+    { id:'total', l:'Total', x:W*.5, y:68, r:13, c:'#3572b0' },
+    { id:'hp', l:'HP Sep', x:W*.33, y:135, r:12, c:'#d07030' },
+    { id:'lp', l:'LP Sep', x:W*.67, y:135, r:12, c:'#d07030' },
+    { id:'n3', l:'N3', x:W*.1, y:205, r:9, c:'#3a8888' },
+    { id:'n6', l:'N6', x:W*.2, y:205, r:9, c:'#3a8888' },
+    { id:'w4', l:'W4', x:W*.33, y:205, r:9, c:'#b33b3b', anom:true },
+    { id:'w7', l:'W7', x:W*.46, y:205, r:9, c:'#3a8888' },
+    { id:'e1', l:'E1', x:W*.56, y:205, r:9, c:'#3a8888' },
+    { id:'e2', l:'E2', x:W*.67, y:205, r:9, c:'#3a8888' },
+    { id:'n8', l:'N8', x:W*.8, y:205, r:9, c:'#3a8888' },
+    { id:'w3', l:'W3', x:W*.9, y:205, r:9, c:'#3a8888' },
   ];
-  // Wells
+
   const wg = [
     {p:'n3',w:['A01','A02','A03']},{p:'n6',w:['A04','A05']},{p:'w4',w:['B01','B02']},
-    {p:'w7',w:['C01','C02','C03']},{p:'e1',w:['D01','D02']},{p:'e2',w:['D03']},{p:'n8',w:['E01','E02']}
+    {p:'w7',w:['C01','C02','C03']},{p:'e1',w:['D01','D02']},{p:'e2',w:['D03']},{p:'n8',w:['E01','E02']},{p:'w3',w:['F01']}
   ];
   const wells = [];
   wg.forEach(g => {
     const p = nodes.find(n=>n.id===g.p);
     g.w.forEach((name,i) => {
-      const off = (i-(g.w.length-1)/2)*24;
-      wells.push({id:name,l:name,x:p.x+off,y:p.y+55,r:7,c:'#8494a5',parent:g.p});
+      const off = (i-(g.w.length-1)/2)*22;
+      wells.push({id:name,l:name,x:p.x+off,y:p.y+52,r:6,c:'#99a5b4',parent:g.p});
     });
   });
+
   const all = [...nodes,...wells];
   const edges = [
     ['total','export'],['hp','total'],['lp','total'],
     ['n3','hp'],['n6','hp'],['w4','hp'],['w7','hp'],
-    ['e1','lp'],['e2','lp'],['n8','lp'],
+    ['e1','lp'],['e2','lp'],['n8','lp'],['w3','lp'],
     ...wells.map(w=>[w.id,w.parent])
   ];
 
-  let s = '';
+  let s = '<defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
+
   edges.forEach(([a,b])=>{
     const na=all.find(n=>n.id===a), nb=all.find(n=>n.id===b);
     if(na&&nb){
-      const hl = a==='w4'||b==='w4';
-      s+=`<line x1="${na.x}" y1="${na.y}" x2="${nb.x}" y2="${nb.y}" stroke="${hl?'#b33b3b':'#dde3ea'}" stroke-width="${hl?2.5:1.5}"/>`;
+      const isAnom = a==='w4'||b==='w4';
+      s+=`<line x1="${na.x}" y1="${na.y}" x2="${nb.x}" y2="${nb.y}" stroke="${isAnom?'#cc4444':'#dde3ea'}" stroke-width="${isAnom?2:1.2}" opacity="${isAnom?0.7:1}"/>`;
     }
   });
+
   all.forEach(n=>{
     s+=`<g style="cursor:pointer" onclick="selectNode('${n.id}')">`;
-    if(n.anom) s+=`<circle cx="${n.x}" cy="${n.y}" r="${n.r+4}" fill="none" stroke="#b33b3b" stroke-width="1.5" stroke-dasharray="3 2" opacity="0.5"/>`;
-    s+=`<circle cx="${n.x}" cy="${n.y}" r="${n.r}" fill="${n.c}" stroke="#fff" stroke-width="2"/>`;
-    const ly = n.r<9 ? n.y+n.r+12 : n.y-n.r-7;
-    s+=`<text x="${n.x}" y="${ly}" text-anchor="middle" font-size="${n.r<9?9:10}" fill="#999" font-weight="500">${n.l}</text>`;
+    if(n.anom) s+=`<circle cx="${n.x}" cy="${n.y}" r="${n.r+5}" fill="none" stroke="#cc4444" stroke-width="1.5" stroke-dasharray="3 2" opacity="0.5"/>`;
+    s+=`<circle cx="${n.x}" cy="${n.y}" r="${n.r}" fill="${n.c}" stroke="white" stroke-width="2"/>`;
+    const ly = n.r<8 ? n.y+n.r+13 : n.y-n.r-8;
+    const fs = n.r<8 ? 8 : 10;
+    s+=`<text x="${n.x}" y="${ly}" text-anchor="middle" font-size="${fs}" fill="#99a5b4" font-weight="500" font-family="Inter,sans-serif">${n.l}</text>`;
     s+=`</g>`;
   });
+
   svg.innerHTML = s;
 }
 
 function selectNode(id) {
   const info = {
-    hp:{n:'HP Separator',t:'Separator',kv:{Gas:'3.2M Sm3/d',Oil:'285 Sm3/d',Pressure:'72 bar',Temp:'68 C',Risers:'N3, N6, W4, W7'}},
-    lp:{n:'LP Separator',t:'Separator',kv:{Gas:'0.8M Sm3/d',Liquid:'950 Sm3/d',Pressure:'12 bar',Temp:'55 C',Risers:'E1, E2, N8'}},
-    w4:{n:'W4 Riser',t:'Riser — Anomaly',kv:{Velocity:'43.2 m/s',Gas:'1.1M Sm3/d',Pressure:'29.5 bar',Wells:'B01, B02',Status:'Exceedance'}},
-    n3:{n:'N3 Riser',t:'Riser',kv:{Velocity:'32 m/s',Gas:'0.9M Sm3/d',Pressure:'29.5 bar',Wells:'A01, A02, A03'}},
-    n6:{n:'N6 Riser',t:'Riser',kv:{Velocity:'28 m/s',Gas:'0.7M Sm3/d',Wells:'A04, A05'}},
+    hp:{n:'HP Separator',t:'Separator',kv:{Gas:'3.2M Sm³/d','Oil':'285 Sm³/d',Pressure:'72 bar',Temp:'68°C','Feed Risers':'N3, N6, W4, W7',Status:'Above design'}},
+    lp:{n:'LP Separator',t:'Separator',kv:{Gas:'0.8M Sm³/d',Liquid:'950 Sm³/d',Pressure:'12 bar',Temp:'55°C','Feed Risers':'E1, E2, N8, W3',Status:'Within limits'}},
+    w4:{n:'W4 Riser',t:'Riser — Exceedance',kv:{Velocity:'43.2 m/s','Gas Flow':'1.1M Sm³/d',Pressure:'29.5 bar',Wells:'B01, B02','Limit':'40 m/s',Status:'Exceedance'}},
+    n3:{n:'N3 Riser',t:'Riser',kv:{Velocity:'32 m/s','Gas Flow':'0.9M Sm³/d',Pressure:'29.5 bar',Wells:'A01, A02, A03'}},
+    n6:{n:'N6 Riser',t:'Riser',kv:{Velocity:'28 m/s','Gas Flow':'0.7M Sm³/d',Wells:'A04, A05'}},
+    total:{n:'Total',t:'Manifold',kv:{'Total Gas':'4.0M Sm³/d','Total Liquid':'3,200 Sm³/d'}},
   };
   const d = info[id];
-  if (!d) { document.getElementById('node-detail').innerHTML=`<div style="text-align:center;color:var(--text-3);padding:12px">${id}</div>`; return; }
-  let h = `<h3>${d.n} <span style="font-weight:400;font-size:12px;color:var(--text-3)">${d.t}</span></h3><div class="kv-grid">`;
+  if (!d) { document.getElementById('node-detail').innerHTML=`<div style="text-align:center;color:var(--text-3);padding:8px;font-size:13px">${id}</div>`; return; }
+  let h = `<h3>${d.n}</h3><div class="node-type">${d.t}</div><div class="kv-grid">`;
   Object.entries(d.kv).forEach(([k,v])=>{ h+=`<div class="kv"><div class="k">${k}</div><div class="v">${v}</div></div>`; });
   h += `</div>`;
   document.getElementById('node-detail').innerHTML = h;
 }
 
-// Charts
+// ======= CHARTS =======
 let chartsReady = false;
 function initCharts() {
   if (chartsReady) return; chartsReady = true;
   const yrs = ['2025','2027','2029','2031','2033','2035','2037','2039'];
-  const cfgs = [
+  const shared = {
+    responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+    scales:{
+      x:{display:true,grid:{display:false},ticks:{font:{size:9,family:'Inter'},color:'#c8ced6'}},
+      y:{display:true,grid:{color:'#f5f7f9'},ticks:{font:{size:9,family:'Inter'},color:'#c8ced6'}}
+    }
+  };
+  [
     {id:'c-gas',d:[3.5,3.2,2.8,3.2,2.4,1.8,1.2,0.6],c:'#3572b0'},
     {id:'c-oil',d:[350,300,280,285,220,160,100,50],c:'#d07030'},
     {id:'c-water',d:[5,10,80,400,1200,1800,2200,2400],c:'#3a8888'},
     {id:'c-temp',d:[68,65,63,62,58,55,52,50],c:'#2e7a48'},
-  ];
-  cfgs.forEach(cfg=>{
+  ].forEach(cfg=>{
     const ctx=document.getElementById(cfg.id); if(!ctx) return;
-    new Chart(ctx,{type:'line',data:{labels:yrs,datasets:[{data:cfg.d,borderColor:cfg.c,backgroundColor:cfg.c+'15',fill:true,tension:0.35,pointRadius:2,borderWidth:1.5}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-    scales:{x:{display:true,grid:{display:false},ticks:{font:{size:9},color:'#bbb'}},y:{display:true,grid:{color:'#f5f5f5'},ticks:{font:{size:9},color:'#bbb'}}}}});
+    new Chart(ctx,{type:'line',data:{labels:yrs,datasets:[{data:cfg.d,borderColor:cfg.c,backgroundColor:cfg.c+'10',fill:true,tension:0.4,pointRadius:2,pointHoverRadius:5,borderWidth:1.5}]},options:shared});
   });
 }
 
-// Panel
+// ======= PANEL =======
 const panels = {
   case1:{t:'HP Separator — Peak Load',h:`
-    <div class="panel-section"><h4>Why selected</h4><p style="font-size:13px;color:var(--text-2);line-height:1.7">HP Separator gas flow reached <b>3.2 MSm3/d</b> on 2031-06-15 — <b>18% above</b> the design envelope of 2.7 MSm3/d. Driven by combined output from N3 and N6 Risers following routing change where wells A05 and A06 were rerouted to N6.</p></div>
-    <div class="panel-section"><h4>Metrics</h4><div class="panel-kv"><div><div class="k">Date</div><div class="v">2031-06-15</div></div><div><div class="k">Profile</div><div class="v">A20</div></div><div><div class="k">Gas Flow</div><div class="v" style="color:var(--red)">3.2M Sm3/d</div></div><div><div class="k">Design Limit</div><div class="v">2.7M Sm3/d</div></div><div><div class="k">Oil Flow</div><div class="v">285 Sm3/d</div></div><div><div class="k">Water Cut</div><div class="v">0.42</div></div></div></div>
-    <div class="panel-section"><h4>Contributing assets</h4><div class="contrib-row"><span>N3 Riser</span><span>1.4M (44%)</span></div><div class="contrib-row"><span>N6 Riser</span><span>1.1M (34%)</span></div><div class="contrib-row"><span>W4 Riser</span><span>0.4M (13%)</span></div><div class="contrib-row"><span>W7 Riser</span><span>0.3M (9%)</span></div></div>
-    <div class="panel-section"><button class="btn btn-accent btn-sm">Add to Simulation</button> <button class="btn btn-sm" onclick="closePanel();navigateTo('production');setTimeout(()=>{selectNode('hp')},200)">View in Topology</button></div>`},
+    <div class="panel-section"><div class="panel-section-title">Why selected</div><p style="font-size:13px;color:var(--text-2);line-height:1.8">HP Separator gas flow reached <strong style="color:var(--r-400)">3.2 MSm³/d</strong> on 2031-06-15 — <strong>18% above</strong> the design envelope of 2.7 MSm³/d. Driven by combined output from N3 and N6 Risers following routing change where wells A05 and A06 were rerouted to N6.</p></div>
+    <div class="panel-section"><div class="panel-section-title">Metrics</div><div class="panel-kv"><div><div class="k">Date</div><div class="v">2031-06-15</div></div><div><div class="k">Profile</div><div class="v">A20</div></div><div><div class="k">Gas Flow</div><div class="v" style="color:var(--r-400)">3.2M Sm³/d</div></div><div><div class="k">Design Limit</div><div class="v">2.7M Sm³/d</div></div><div><div class="k">Oil Flow</div><div class="v">285 Sm³/d</div></div><div><div class="k">Water Cut</div><div class="v">0.42</div></div></div></div>
+    <div class="panel-section"><div class="panel-section-title">Contributing Assets</div><div class="contrib-row"><span class="name">N3 Riser</span><span class="val">1.4M (44%)</span></div><div class="contrib-row"><span class="name">N6 Riser</span><span class="val">1.1M (34%)</span></div><div class="contrib-row"><span class="name">W4 Riser</span><span class="val">0.4M (13%)</span></div><div class="contrib-row"><span class="name">W7 Riser</span><span class="val">0.3M (9%)</span></div></div>
+    <div class="panel-section"><div class="panel-actions"><button class="btn btn-primary btn-sm">Add to Simulation</button><button class="btn btn-sm" onclick="closePanel();navigateTo('production');setTimeout(()=>{selectNode('hp')},200)">View in Topology</button></div></div>`},
   case2:{t:'W4 Riser — Velocity Exceedance',h:`
-    <div class="panel-section"><h4>Why selected</h4><p style="font-size:13px;color:var(--text-2);line-height:1.7">W4 Riser velocity hit <b>43.2 m/s</b> on 2032-01-10 — exceeds the 40 m/s limit. Caused by rerouting of wells from W7 Riser during a maintenance shutdown, concentrating flow through W4.</p></div>
-    <div class="panel-section"><h4>Metrics</h4><div class="panel-kv"><div><div class="k">Date</div><div class="v">2032-01-10</div></div><div><div class="k">Profile</div><div class="v">A20</div></div><div><div class="k">Velocity</div><div class="v" style="color:var(--red)">43.2 m/s</div></div><div><div class="k">Limit</div><div class="v">40 m/s</div></div><div><div class="k">Volume Flow</div><div class="v">5,496</div></div><div><div class="k">Mix Density</div><div class="v">34.0</div></div></div></div>
-    <div class="panel-section"><h4>Contributing assets</h4><div class="contrib-row"><span>W4 wells (B01, B02)</span><span>Direct</span></div><div class="contrib-row"><span>Rerouted from W7</span><span>C01, C02</span></div></div>
-    <div class="panel-section"><button class="btn btn-accent btn-sm">Add to Simulation</button> <button class="btn btn-sm" onclick="closePanel();navigateTo('production');setTimeout(()=>{selectNode('w4')},200)">View in Topology</button></div>`},
+    <div class="panel-section"><div class="panel-section-title">Why selected</div><p style="font-size:13px;color:var(--text-2);line-height:1.8">W4 Riser velocity hit <strong style="color:var(--r-400)">43.2 m/s</strong> on 2032-01-10 — exceeds the 40 m/s limit. Caused by rerouting wells from W7 Riser during maintenance shutdown, concentrating flow through W4.</p></div>
+    <div class="panel-section"><div class="panel-section-title">Metrics</div><div class="panel-kv"><div><div class="k">Date</div><div class="v">2032-01-10</div></div><div><div class="k">Profile</div><div class="v">A20</div></div><div><div class="k">Velocity</div><div class="v" style="color:var(--r-400)">43.2 m/s</div></div><div><div class="k">Limit</div><div class="v">40 m/s</div></div><div><div class="k">Volume Flow</div><div class="v">5,496 m³/h</div></div><div><div class="k">Mix Density</div><div class="v">34.0 kg/m³</div></div></div></div>
+    <div class="panel-section"><div class="panel-section-title">Contributing Assets</div><div class="contrib-row"><span class="name">B01, B02 (W4 wells)</span><span class="val">Direct</span></div><div class="contrib-row"><span class="name">C01, C02 (rerouted from W7)</span><span class="val">Maintenance</span></div></div>
+    <div class="panel-section"><div class="panel-actions"><button class="btn btn-primary btn-sm">Add to Simulation</button><button class="btn btn-sm" onclick="closePanel();navigateTo('production');setTimeout(()=>{selectNode('w4')},200)">View in Topology</button></div></div>`},
   case3:{t:'LP Separator — Liquid Surge',h:`
-    <div class="panel-section"><h4>Why selected</h4><p style="font-size:13px;color:var(--text-2);line-height:1.7">LP Separator liquid flow spiked to <b>2,800 Sm3/d</b> on 2033-09-22. Water cut increase on E2 Riser combined with a new well tie-in on N6 Riser contributed to the surge.</p></div>
-    <div class="panel-section"><h4>Metrics</h4><div class="panel-kv"><div><div class="k">Date</div><div class="v">2033-09-22</div></div><div><div class="k">Profile</div><div class="v">A21</div></div><div><div class="k">Liquid Flow</div><div class="v" style="color:var(--secondary)">2,800 Sm3/d</div></div><div><div class="k">Pressure</div><div class="v">29.5 bar</div></div><div><div class="k">Temperature</div><div class="v">52 C</div></div></div></div>
-    <div class="panel-section"><h4>Contributing assets</h4><div class="contrib-row"><span>E2 Riser</span><span>Water cut increase</span></div><div class="contrib-row"><span>N6 Riser</span><span>New well tie-in</span></div></div>
-    <div class="panel-section"><button class="btn btn-accent btn-sm">Add to Simulation</button> <button class="btn btn-sm" onclick="closePanel();navigateTo('production');setTimeout(()=>{selectNode('lp')},200)">View in Topology</button></div>`},
+    <div class="panel-section"><div class="panel-section-title">Why selected</div><p style="font-size:13px;color:var(--text-2);line-height:1.8">LP Separator liquid flow spiked to <strong style="color:var(--s-300)">2,800 Sm³/d</strong> on 2033-09-22. Water cut increase on E2 Riser combined with new well tie-in on N6 contributed to the surge.</p></div>
+    <div class="panel-section"><div class="panel-section-title">Metrics</div><div class="panel-kv"><div><div class="k">Date</div><div class="v">2033-09-22</div></div><div><div class="k">Profile</div><div class="v">A21</div></div><div><div class="k">Liquid Flow</div><div class="v" style="color:var(--s-300)">2,800 Sm³/d</div></div><div><div class="k">Pressure</div><div class="v">29.5 bar</div></div><div><div class="k">Temperature</div><div class="v">52°C</div></div><div><div class="k">Water Cut</div><div class="v">0.68</div></div></div></div>
+    <div class="panel-section"><div class="panel-section-title">Contributing Assets</div><div class="contrib-row"><span class="name">E2 Riser</span><span class="val">Water cut increase</span></div><div class="contrib-row"><span class="name">N6 Riser</span><span class="val">New well tie-in</span></div></div>
+    <div class="panel-section"><div class="panel-actions"><button class="btn btn-primary btn-sm">Add to Simulation</button><button class="btn btn-sm" onclick="closePanel();navigateTo('production');setTimeout(()=>{selectNode('lp')},200)">View in Topology</button></div></div>`},
   line1:{t:'23-L-X001-BD20-10',h:`
-    <div class="panel-section" style="padding:12px 16px;background:var(--amber-light);border-radius:6px;margin-bottom:20px;font-size:13px;color:var(--amber)"><b>Marginal:</b> Peak velocity 38.5 m/s — 96% of 40 m/s limit</div>
-    <div class="panel-section"><h4>Properties</h4><div class="panel-kv"><div><div class="k">Pipe Spec</div><div class="v">BD20</div></div><div><div class="k">DN</div><div class="v">10</div></div><div><div class="k">System</div><div class="v">23</div></div><div><div class="k">Service</div><div class="v">PV</div></div><div><div class="k">Length</div><div class="v">53.6 m</div></div><div><div class="k">Roughness</div><div class="v">0.05</div></div></div></div>
-    <div class="panel-section"><h4>Sizing (worst case)</h4><div class="panel-kv"><div><div class="k">Max Velocity</div><div class="v" style="color:var(--amber)">38.5 m/s</div></div><div><div class="k">Limit</div><div class="v">40 m/s</div></div><div><div class="k">RhoV2</div><div class="v">27,973</div></div><div><div class="k">P Drop</div><div class="v">0.83 bar</div></div></div></div>`},
+    <div style="padding:14px 18px;background:var(--w-50);border-radius:8px;margin-bottom:24px;font-size:13px;color:var(--w-400);font-weight:500"><strong>Marginal:</strong> Peak velocity 38.5 m/s — 96% of 40 m/s limit</div>
+    <div class="panel-section"><div class="panel-section-title">Properties</div><div class="panel-kv"><div><div class="k">Pipe Spec</div><div class="v">BD20</div></div><div><div class="k">DN</div><div class="v">10</div></div><div><div class="k">System</div><div class="v">23</div></div><div><div class="k">Service</div><div class="v">PV</div></div><div><div class="k">Length</div><div class="v">53.6 m</div></div><div><div class="k">Roughness</div><div class="v">0.05</div></div></div></div>
+    <div class="panel-section"><div class="panel-section-title">Sizing (worst case)</div><div class="panel-kv"><div><div class="k">Peak Velocity</div><div class="v" style="color:var(--w-300)">38.5 m/s</div></div><div><div class="k">Limit</div><div class="v">40 m/s</div></div><div><div class="k">ρv²</div><div class="v">27,973</div></div><div><div class="k">ΔP</div><div class="v">0.83 bar</div></div></div></div>`},
   pump1:{t:'24-PA-X001 — NGL Pump',h:`
-    <div class="panel-section"><h4>Info</h4><div class="panel-kv"><div><div class="k">Facility</div><div class="v">SKARV FPSO</div></div><div><div class="k">System</div><div class="v">24</div></div></div></div>
-    <div class="panel-section"><h4>Operating range</h4><div class="panel-kv"><div><div class="k">Power</div><div class="v">23–33 kW</div></div><div><div class="k">Flow</div><div class="v">39–56 m3/h</div></div><div><div class="k">Inlet Density</div><div class="v">458–460</div></div><div><div class="k">Diff Press</div><div class="v">16 bar</div></div><div><div class="k">NPSH</div><div class="v">354–356 m</div></div></div></div>`},
+    <div class="panel-section"><div class="panel-section-title">Equipment Info</div><div class="panel-kv"><div><div class="k">Facility</div><div class="v">SKARV FPSO</div></div><div><div class="k">System</div><div class="v">24</div></div><div><div class="k">Type</div><div class="v">NGL Pump</div></div><div><div class="k">Status</div><div class="v" style="color:var(--g-300)">OK</div></div></div></div>
+    <div class="panel-section"><div class="panel-section-title">Operating Range</div><div class="panel-kv"><div><div class="k">Power</div><div class="v">23–33 kW</div></div><div><div class="k">Volume Flow</div><div class="v">39–56 m³/h</div></div><div><div class="k">Inlet Density</div><div class="v">458–460 kg/m³</div></div><div><div class="k">Diff Pressure</div><div class="v">16 bar</div></div><div><div class="k">NPSH Available</div><div class="v">354–356 m</div></div><div><div class="k">Inlet Pressure</div><div class="v">30 bar</div></div></div></div>`},
 };
 
 function openPanel(id) {
