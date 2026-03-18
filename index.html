@@ -289,7 +289,7 @@ tr:hover td { background: var(--n-25); }
     <button class="login-btn" onclick="tryLogin()">Continue</button>
     <div class="login-error" id="login-error">Invalid code</div>
     <div class="login-hint">Hint: ada2026</div>
-    <div style="color: rgba(255,255,255,0.15); font-size: 10px; margin-top: 40px; letter-spacing: 0.05em;">v3.5.0</div>
+    <div style="color: rgba(255,255,255,0.15); font-size: 10px; margin-top: 40px; letter-spacing: 0.05em;">v3.6.0</div>
   </div>
 </div>
 
@@ -380,7 +380,7 @@ tr:hover td { background: var(--n-25); }
                   <span class="severity sev-exc">Exceedance</span>
                 </div>
                 <div class="case-explanation">
-                  <strong>Why this case governs:</strong> HP Separator aggregate gas flow reaches <strong>3.2 MSm³/d</strong> — the absolute peak across all timesteps and all 4 feed risers (N3, N6, W4, W7). This is <strong>18% above the design capacity</strong> of 2.7 MSm³/d. Coincides with peak production from N3 + N6 wells after routing change moved A05–A06 to N6.
+                  <strong>Why this case governs:</strong> HP Separator aggregate gas flow reaches <strong>3.2 MSm³/d</strong> — the absolute peak across all timesteps and all 4 feed risers (N3, N6, W4, W7). This is <strong>18% above the assumed design capacity</strong> of 2.7 MSm³/d <em>(assumed — verify against equipment datasheet)</em>. Coincides with peak from N3 + N6 after routing change.
                 </div>
                 <div class="util-row">
                   <span class="util-label">Gas capacity</span>
@@ -389,7 +389,7 @@ tr:hover td { background: var(--n-25); }
                 </div>
                 <div class="case-metrics">
                   <div class="case-metric"><div class="label">Gas Flow</div><div class="value danger">3.2M</div><div class="unit">Sm³/d</div></div>
-                  <div class="case-metric"><div class="label">Design</div><div class="value">2.7M</div><div class="unit">Sm³/d</div></div>
+                  <div class="case-metric"><div class="label">Design (assumed)</div><div class="value" style="font-size:13px">2.7M¹</div><div class="unit">Sm³/d</div></div>
                   <div class="case-metric"><div class="label">Liquid</div><div class="value">1,285</div><div class="unit">Sm³/d</div></div>
                   <div class="case-metric"><div class="label">Pressure</div><div class="value">72</div><div class="unit">bar</div></div>
                 </div>
@@ -413,17 +413,17 @@ tr:hover td { background: var(--n-25); }
                   <span class="severity sev-exc">Exceedance</span>
                 </div>
                 <div class="case-explanation">
-                  <strong>Why this case governs:</strong> W4 Riser velocity reaches <strong>43.2 m/s</strong> (ρv² = 27,973) — the highest erosion loading across all risers, all timesteps. Exceeds the <strong>40 m/s API limit</strong>. Caused by rerouting W7 wells (C01, C02) to W4 during maintenance, concentrating flow in a smaller riser.
+                  <strong>Why this case governs:</strong> W4 Riser has the highest erosion loading across all risers and timesteps. Based on assumed 8" riser (ID ≈ 202 mm — verify against P&ID/isometrics), velocity reaches <strong>43.2 m/s</strong> vs API RP 14E limit of ~28.5 m/s (C=100). Caused by rerouting W7 wells (C01, C02) to W4 during maintenance — same flow, smaller pipe.
                 </div>
                 <div class="util-row">
-                  <span class="util-label">Velocity limit</span>
-                  <div class="util-track"><div class="util-fill exceed" style="width:108%"></div></div>
-                  <span class="util-val" style="color:var(--r-400)">108%</span>
+                  <span class="util-label">API RP 14E — erosion velocity (8" assumed)</span>
+                  <div class="util-track"><div class="util-fill exceed" style="width:100%"></div></div>
+                  <span class="util-val" style="color:var(--r-400)">152%</span>
                 </div>
                 <div class="case-metrics">
                   <div class="case-metric"><div class="label">Velocity</div><div class="value danger">43.2</div><div class="unit">m/s</div></div>
-                  <div class="case-metric"><div class="label">API Limit</div><div class="value">40</div><div class="unit">m/s</div></div>
-                  <div class="case-metric"><div class="label">ρv²</div><div class="value danger">27,973</div></div>
+                  <div class="case-metric"><div class="label">API Ve (C=100)</div><div class="value">~28.5</div><div class="unit">m/s</div></div>
+                  <div class="case-metric"><div class="label">Pipe ID (assumed)</div><div class="value" style="font-size:13px">8" / 202mm</div></div>
                   <div class="case-metric"><div class="label">Mix Dens</div><div class="value">34.0</div><div class="unit">kg/m³</div></div>
                 </div>
               </div>
@@ -446,7 +446,7 @@ tr:hover td { background: var(--n-25); }
                   <span class="severity sev-margin">Marginal</span>
                 </div>
                 <div class="case-explanation">
-                  <strong>Why this case governs:</strong> LP Separator liquid flow reaches <strong>2,800 Sm³/d</strong> — the peak liquid load. At <strong>93% of design capacity</strong> (3,000 Sm³/d). E2 Riser water cut increase + new well tie-in on N6.
+                  <strong>Why this case governs:</strong> LP Separator liquid flow reaches <strong>2,800 Sm³/d</strong> — the peak liquid load across all profiles. At <strong>93% of assumed design capacity</strong> (3,000 Sm³/d — assumed, verify against equipment datasheet). E2 water cut increase + N6 new well tie-in.
                 </div>
                 <div class="util-row">
                   <span class="util-label">Liquid capacity</span>
@@ -455,7 +455,7 @@ tr:hover td { background: var(--n-25); }
                 </div>
                 <div class="case-metrics">
                   <div class="case-metric"><div class="label">Liquid</div><div class="value warning">2,800</div><div class="unit">Sm³/d</div></div>
-                  <div class="case-metric"><div class="label">Design</div><div class="value">3,000</div><div class="unit">Sm³/d</div></div>
+                  <div class="case-metric"><div class="label">Design (assumed)</div><div class="value" style="font-size:13px">3,000¹</div><div class="unit">Sm³/d</div></div>
                   <div class="case-metric"><div class="label">Water Cut</div><div class="value">0.68</div></div>
                   <div class="case-metric"><div class="label">Pressure</div><div class="value">12</div><div class="unit">bar</div></div>
                 </div>
@@ -559,6 +559,11 @@ tr:hover td { background: var(--n-25); }
 
           </div>
 
+          <!-- Assumptions footnote -->
+          <div style="margin-top:8px;padding:10px 14px;background:var(--n-50);border:1px solid var(--border);border-radius:8px;font-size:11px;color:var(--text-3);line-height:1.7">
+            <strong style="color:var(--text-2)">¹ Assumptions in this screening:</strong> Design capacities (HP/LP Separator) and pipe diameters are not defined in the production profiles — they are engineering assumptions for pre-assessment purposes only. Pipe sizes must be confirmed against P&ID / isometrics. Equipment design limits must be confirmed against datasheets before use in formal study.
+          </div>
+
           <!-- Sidebar -->
           <div class="dash-side">
             <div class="section-header" style="margin-bottom:12px">
@@ -634,6 +639,7 @@ tr:hover td { background: var(--n-25); }
       </div>
       <div class="content">
         <div class="prod-toolbar">
+          <div style="font-size:10px;font-weight:600;color:var(--text-3);letter-spacing:0.05em;text-transform:uppercase;align-self:center;margin-right:4px">Skarv scenarios</div>
           <button class="chip active" onclick="selectProfile(this)">A20 <span class="dot" style="background:var(--r-300)"></span></button>
           <button class="chip" onclick="selectProfile(this)">A21 & A22 <span class="dot" style="background:var(--w-300)"></span></button>
           <button class="chip" onclick="selectProfile(this)">A24</button>
@@ -650,7 +656,7 @@ tr:hover td { background: var(--n-25); }
             <div class="topo-canvas"><svg id="topo-svg" width="100%" height="100%"></svg></div>
             <div class="topo-controls">
               <label>Timeline</label>
-              <input type="range" min="2025" max="2040" value="2031" oninput="document.getElementById('yr').textContent=this.value">
+              <input type="range" min="2025" max="2040" value="2031" oninput="const y=parseInt(this.value);document.getElementById('yr').textContent=y;drawTopo(y)">
               <span class="year" id="yr">2031</span>
               <div style="flex:1"></div>
               <select><option>Full network</option><option>Separators only</option><option>Highlight anomalies</option></select>
@@ -845,6 +851,7 @@ function navigateTo(page) {
   document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.toggle('active', a.dataset.page === page));
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + page));
   if (page === 'production') setTimeout(() => { drawTopo(); initCharts(); }, 80);
+
 }
 
 function selectProfile(el) {
@@ -870,30 +877,58 @@ function filterCases(el, type) {
 }
 
 // Topology
-function drawTopo() {
+// Riser pipe sizes (assumed — verify against P&ID / isometrics)
+const riserPipes = {
+  n3:{dn:'12"',id:'304 mm',wt:'SCH 40'},
+  n6:{dn:'10"',id:'254 mm',wt:'SCH 40'},
+  w4:{dn:'8"', id:'202 mm',wt:'SCH 40'},
+  w7:{dn:'10"',id:'254 mm',wt:'SCH 40'},
+  e1:{dn:'8"', id:'202 mm',wt:'SCH 40'},
+  e2:{dn:'8"', id:'202 mm',wt:'SCH 40'},
+  n8:{dn:'6"', id:'152 mm',wt:'SCH 40'},
+  w3:{dn:'8"', id:'202 mm',wt:'SCH 40'},
+};
+
+function drawTopo(year) {
+  year = year || parseInt(document.getElementById('yr').textContent) || 2031;
   const svg = document.getElementById('topo-svg');
   if (!svg) return;
   const W = svg.parentElement.getBoundingClientRect().width || 700;
   const H = 320;
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
 
+  // Routing changes over field life (per production scenarios A20/A21/A24):
+  // 2032: W7 maintenance → C01, C02 rerouted to W4 (erosion exceedance case)
+  // 2034: Permanent reroute of A05 from N6 to N3 (routing change case)
+  // 2037+: N8 in late-life decline, E01/E02 turndown
+  const w4Wells  = year >= 2032 ? ['B01','B02','C01','C02'] : ['B01','B02'];
+  const w7Wells  = year >= 2032 ? ['C03'] : ['C01','C02','C03'];
+  const n3Wells  = year >= 2034 ? ['A01','A02','A03','A05'] : ['A01','A02','A03'];
+  const n6Wells  = year >= 2034 ? ['A04'] : ['A04','A05'];
+  const n8Wells  = year >= 2037 ? ['E01↓','E02?'] : ['E01','E02'];
+
+  // Anomaly markers driven by year
+  const w4Anom  = year >= 2032 && year <= 2033; // erosion exceedance window
+  const n8Anom2 = year >= 2037;                 // turndown risk window
+  const n3Route = year >= 2034;                 // routing change active
+
   const nodes = [
-    { id:'export', l:'Export', x:W*.5, y:24, r:10, c:'#153a5e' },
-    { id:'total', l:'Total', x:W*.5, y:68, r:13, c:'#3572b0' },
-    { id:'hp', l:'HP Sep', x:W*.33, y:135, r:12, c:'#d07030' },
-    { id:'lp', l:'LP Sep', x:W*.67, y:135, r:12, c:'#d07030' },
-    { id:'n3', l:'N3', x:W*.1, y:205, r:9, c:'#3a8888' },
-    { id:'n6', l:'N6', x:W*.2, y:205, r:9, c:'#3a8888' },
-    { id:'w4', l:'W4', x:W*.33, y:205, r:9, c:'#b33b3b', anom:true },
-    { id:'w7', l:'W7', x:W*.46, y:205, r:9, c:'#3a8888' },
-    { id:'e1', l:'E1', x:W*.56, y:205, r:9, c:'#3a8888' },
-    { id:'e2', l:'E2', x:W*.67, y:205, r:9, c:'#3a8888' },
-    { id:'n8', l:'N8', x:W*.8, y:205, r:9, c:'#5aacac', anom2:true },
-    { id:'w3', l:'W3', x:W*.9, y:205, r:9, c:'#3a8888' },
+    { id:'export', l:'Export (20")', x:W*.5,  y:24,  r:10, c:'#153a5e' },
+    { id:'total',  l:'Total',        x:W*.5,  y:68,  r:13, c:'#3572b0' },
+    { id:'hp',     l:'HP Sep',       x:W*.33, y:135, r:12, c:'#d07030' },
+    { id:'lp',     l:'LP Sep',       x:W*.67, y:135, r:12, c:'#d07030' },
+    { id:'n3',     l:'N3 (12")',     x:W*.1,  y:205, r:9,  c: n3Route ? '#3572b0' : '#3a8888', routeChange: n3Route },
+    { id:'n6',     l:'N6 (10")',     x:W*.2,  y:205, r:9,  c:'#3a8888' },
+    { id:'w4',     l:'W4 (8")',      x:W*.33, y:205, r:9,  c: w4Anom ? '#b33b3b' : '#3a8888', anom: w4Anom },
+    { id:'w7',     l:'W7 (10")',     x:W*.46, y:205, r:9,  c:'#3a8888' },
+    { id:'e1',     l:'E1 (8")',      x:W*.56, y:205, r:9,  c:'#3a8888' },
+    { id:'e2',     l:'E2 (8")',      x:W*.67, y:205, r:9,  c:'#3a8888' },
+    { id:'n8',     l:'N8 (6")',      x:W*.8,  y:205, r:9,  c: n8Anom2 ? '#9e8830' : '#3a8888', anom2: n8Anom2 },
+    { id:'w3',     l:'W3 (8")',      x:W*.9,  y:205, r:9,  c:'#3a8888' },
   ];
   const wg = [
-    {p:'n3',w:['A01','A02','A03']},{p:'n6',w:['A04','A05']},{p:'w4',w:['B01','B02']},
-    {p:'w7',w:['C01','C02','C03']},{p:'e1',w:['D01','D02']},{p:'e2',w:['D03']},{p:'n8',w:['E01','E02']},{p:'w3',w:['F01']}
+    {p:'n3',w:n3Wells},{p:'n6',w:n6Wells},{p:'w4',w:w4Wells},
+    {p:'w7',w:w7Wells},{p:'e1',w:['D01','D02']},{p:'e2',w:['D03']},{p:'n8',w:n8Wells},{p:'w3',w:['F01']}
   ];
   const wells = [];
   wg.forEach(g => {
@@ -909,8 +944,12 @@ function drawTopo() {
   edges.forEach(([a,b])=>{
     const na=all.find(n=>n.id===a), nb=all.find(n=>n.id===b);
     if(na&&nb){
-      const hl = a==='w4'||b==='w4';
-      s+=`<line x1="${na.x}" y1="${na.y}" x2="${nb.x}" y2="${nb.y}" stroke="${hl?'#cc4444':'#dde3ea'}" stroke-width="${hl?2:1.2}" opacity="${hl?0.7:1}"/>`;
+      const erosion = (a==='w4'||b==='w4') && w4Anom;
+      const routing = (a==='n3'||b==='n3') && n3Route;
+      const turndown = (a==='n8'||b==='n8') && n8Anom2;
+      const stroke = erosion ? '#cc4444' : routing ? '#3572b0' : turndown ? '#9e8830' : '#dde3ea';
+      const sw = (erosion||routing||turndown) ? 2 : 1.2;
+      s+=`<line x1="${na.x}" y1="${na.y}" x2="${nb.x}" y2="${nb.y}" stroke="${stroke}" stroke-width="${sw}" opacity="${(erosion||routing||turndown)?0.8:1}"/>`;
     }
   });
   all.forEach(n=>{
@@ -926,14 +965,65 @@ function drawTopo() {
 }
 
 function selectNode(id) {
+  const yr = parseInt(document.getElementById('yr').textContent) || 2031;
   const info = {
-    hp:{n:'HP Separator',t:'Separator',kv:{'Gas Flow':'3.2M Sm³/d','Design Gas':'2.7M Sm³/d','Utilisation':'118%','Oil':'285 Sm³/d',Pressure:'72 bar',Temp:'68°C','Feed Risers':'N3, N6, W4, W7'}},
-    lp:{n:'LP Separator',t:'Separator',kv:{'Gas Flow':'0.8M Sm³/d','Liquid':'950 Sm³/d',Pressure:'12 bar',Temp:'55°C','Feed Risers':'E1, E2, N8, W3'}},
-    w4:{n:'W4 Riser',t:'Riser — Exceedance',kv:{Velocity:'43.2 m/s','API Limit':'40 m/s','ρv²':'27,973','Gas Flow':'1.1M Sm³/d',Pressure:'29.5 bar',Wells:'B01, B02 (+C01, C02 rerouted)'}},
-    n3:{n:'N3 Riser',t:'Riser',kv:{Velocity:'32 m/s','Gas Flow':'0.9M Sm³/d',Pressure:'29.5 bar',Wells:'A01, A02, A03 (+2 after 2034)'}},
-    n6:{n:'N6 Riser',t:'Riser',kv:{Velocity:'28 m/s','Gas Flow':'0.7M Sm³/d',Wells:'A04, A05'}},
-    n8:{n:'N8 Riser',t:'Riser — Turndown risk',kv:{'Gas Flow':'0.18M Sm³/d','Min Stable':'0.25M Sm³/d','Utilisation':'72%',Wells:'E01, E02 (declining)',GOR:'4,200'}},
-    total:{n:'Total',t:'Manifold',kv:{'Total Gas':'4.0M Sm³/d','Total Liquid':'3,200 Sm³/d'}},
+    hp:{n:'HP Separator',t:'Separator — HP train',kv:{
+      'Peak Gas Flow':'3.2 MSm³/d (2031)',
+      'Design Capacity':'2.7 MSm³/d (assumed — TBC vs datasheet)',
+      'Utilisation (peak)':'118% of assumed limit',
+      'Oil Flow':'285 Sm³/d', Pressure:'72 bar', Temp:'68°C',
+      'Feed Risers':'N3, N6, W4, W7'}},
+    lp:{n:'LP Separator',t:'Separator — LP train',kv:{
+      'Peak Liquid':'2,800 Sm³/d (2033)',
+      'Design Capacity':'3,000 Sm³/d (assumed — TBC vs datasheet)',
+      'Gas Flow':'0.8 MSm³/d', Pressure:'12 bar', Temp:'55°C',
+      'Feed Risers':'E1, E2, N8, W3'}},
+    w4:{n:'W4 Riser',t:'Riser — Erosion Exceedance (2032)',kv:{
+      'Nom. Size':'8" (assumed — verify isometrics)',
+      'ID':'202 mm (assumed SCH 40)',
+      'Velocity':'43.2 m/s (basis: assumed 8" ID)',
+      'ρv² (API RP 14E)':'63,400 kg/m·s²',
+      'API Ve Limit':'~28.5 m/s (C=100, ρ=34 kg/m³)',
+      'Gas Flow':'1.1 MSm³/d', Pressure:'29.5 bar',
+      'Wells (2032)':'B01, B02, C01, C02 (rerouted from W7)'}},
+    n3:{n:'N3 Riser',t:'Riser — Routing change from 2034',kv:{
+      'Nom. Size':'12" (assumed — verify isometrics)',
+      'ID':'304 mm (assumed SCH 40)',
+      'Velocity':'22 m/s', 'Gas Flow':'0.9 MSm³/d', Pressure:'29.5 bar',
+      'Wells': yr >= 2034 ? 'A01, A02, A03, A05 (post-reroute)' : 'A01, A02, A03',
+      'Note': yr >= 2034 ? 'A05 rerouted from N6 at 2034' : 'A05 reroutes to N3 in 2034'}},
+    n6:{n:'N6 Riser',t:'Riser',kv:{
+      'Nom. Size':'10" (assumed — verify isometrics)',
+      'ID':'254 mm (assumed SCH 40)',
+      'Velocity':'18 m/s','Gas Flow':'0.7 MSm³/d',
+      'Wells': yr >= 2034 ? 'A04 only (A05 rerouted 2034)' : 'A04, A05'}},
+    w7:{n:'W7 Riser',t:'Riser',kv:{
+      'Nom. Size':'10" (assumed — verify isometrics)',
+      'ID':'254 mm (assumed SCH 40)',
+      'Gas Flow':'0.6 MSm³/d', Pressure:'29.5 bar',
+      'Wells': yr >= 2032 ? 'C03 only (C01, C02 rerouted to W4)' : 'C01, C02, C03'}},
+    e1:{n:'E1 Riser',t:'Riser',kv:{
+      'Nom. Size':'8" (assumed — verify isometrics)',
+      'ID':'202 mm (assumed SCH 40)',
+      'Gas Flow':'0.5 MSm³/d', Wells:'D01, D02'}},
+    e2:{n:'E2 Riser',t:'Riser — High water cut EOL',kv:{
+      'Nom. Size':'8" (assumed — verify isometrics)',
+      'ID':'202 mm (assumed SCH 40)',
+      'Water Cut (2038)':'0.92','Gas Flow':'0.15 MSm³/d',
+      'Water Rate':'2,640 Sm³/d', Wells:'D03'}},
+    n8:{n:'N8 Riser',t: yr >= 2037 ? 'Riser — Turndown risk (late life)' : 'Riser',kv:{
+      'Nom. Size':'6" (assumed — verify isometrics)',
+      'ID':'152 mm (assumed SCH 40)',
+      'Gas Flow': yr >= 2037 ? '0.18 MSm³/d (below min stable)' : '0.6 MSm³/d',
+      'Min Stable Flow':'0.25 MSm³/d',
+      'Status': yr >= 2037 ? 'TURNDOWN RISK — slugging' : 'OK',
+      'Wells': yr >= 2037 ? 'E01 (declining), E02 (intermittent)' : 'E01, E02', GOR:'4,200'}},
+    w3:{n:'W3 Riser',t:'Riser',kv:{
+      'Nom. Size':'8" (assumed — verify isometrics)',
+      'ID':'202 mm (assumed SCH 40)',
+      'Gas Flow':'0.3 MSm³/d', Wells:'F01'}},
+    total:{n:'Total Manifold',t:'Network total',kv:{'Total Gas':'4.0 MSm³/d','Total Liquid':'3,200 Sm³/d'}},
+    export:{n:'Export Header',t:'Export — 20" (assumed)',kv:{'Nom. Size':'20" (assumed)','ID':'502 mm'}},
   };
   const d = info[id];
   if (!d) { document.getElementById('node-detail').innerHTML=`<div style="text-align:center;color:var(--text-3);padding:8px">${id}</div>`; return; }
@@ -1020,14 +1110,14 @@ function initCharts() {
 const panels = {
   case1:{t:'HP Separator — Peak Gas Load',h:`
     <div class="panel-section"><div class="panel-section-title">Screening Criterion</div><p style="font-size:13px;color:var(--text-2);line-height:1.8"><strong>Peak Gas Rate → HP Separator.</strong> This is the timestep where aggregate gas flow to HP Separator is highest across all production profiles. It defines the <strong>gas handling capacity requirement</strong> for the separator and downstream compression.</p></div>
-    <div class="panel-section"><div class="panel-section-title">Why it exceeds</div><p style="font-size:13px;color:var(--text-2);line-height:1.8">Gas flow reaches <strong style="color:var(--r-400)">3.2 MSm³/d</strong> vs design of 2.7M — <strong>118% utilisation</strong>. Caused by coincident peak on N3 + N6 risers after routing change moved wells A05–A06 to N6. All 4 HP-feed risers producing near-peak simultaneously.</p></div>
+    <div class="panel-section"><div class="panel-section-title">Why it exceeds</div><p style="font-size:13px;color:var(--text-2);line-height:1.8">Gas flow reaches <strong style="color:var(--r-400)">3.2 MSm³/d</strong> — <strong>118% of assumed design capacity (2.7 MSm³/d)</strong>. Note: design capacity is not defined in the production profiles — this limit is an engineering assumption pending equipment datasheet confirmation. All 4 HP-feed risers producing near-peak simultaneously after routing change moved A05–A06 to N6.</p></div>
     <div class="panel-section"><div class="panel-section-title">Key Values</div><div class="panel-kv"><div><div class="k">Date</div><div class="v">2031-06-15</div></div><div><div class="k">Profile</div><div class="v">A20</div></div><div><div class="k">Gas Flow</div><div class="v" style="color:var(--r-400)">3.2M Sm³/d</div></div><div><div class="k">Design Capacity</div><div class="v">2.7M Sm³/d</div></div><div><div class="k">Oil Flow</div><div class="v">285 Sm³/d</div></div><div><div class="k">Water Cut</div><div class="v">0.42</div></div><div><div class="k">Pressure</div><div class="v">72 bar</div></div><div><div class="k">Temperature</div><div class="v">68°C</div></div></div></div>
     <div class="panel-section"><div class="panel-section-title">Riser Contributions</div><div class="contrib-row"><span class="name">N3 Riser (A01–A03)</span><span class="val">1.4M Sm³/d (44%)</span></div><div class="contrib-row"><span class="name">N6 Riser (A04–A05)</span><span class="val">1.1M Sm³/d (34%)</span></div><div class="contrib-row"><span class="name">W4 Riser (B01–B02)</span><span class="val">0.4M Sm³/d (13%)</span></div><div class="contrib-row"><span class="name">W7 Riser (C01–C03)</span><span class="val">0.3M Sm³/d (9%)</span></div></div>
     <div class="panel-section"><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm sim-btn" data-case="case1" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button><button class="btn btn-sm" onclick="closePanel();navigateTo('production');setTimeout(()=>{selectNode('hp')},200)">View in Topology</button></div></div>`},
   case2:{t:'W4 Riser — Erosion Velocity',h:`
     <div class="panel-section"><div class="panel-section-title">Screening Criterion</div><p style="font-size:13px;color:var(--text-2);line-height:1.8"><strong>ρv² / Erosional Velocity → W4 Riser.</strong> This is the timestep where erosional velocity is highest across all risers. Defines the <strong>riser sizing verification requirement</strong> per API RP 14E.</p></div>
-    <div class="panel-section"><div class="panel-section-title">Why it exceeds</div><p style="font-size:13px;color:var(--text-2);line-height:1.8">Velocity reaches <strong style="color:var(--r-400)">43.2 m/s</strong> vs API limit of 40 m/s — <strong>108%</strong>. W7 maintenance rerouted wells C01, C02 through W4, doubling its throughput without diameter change.</p></div>
-    <div class="panel-section"><div class="panel-section-title">Key Values</div><div class="panel-kv"><div><div class="k">Date</div><div class="v">2032-01-10</div></div><div><div class="k">Velocity</div><div class="v" style="color:var(--r-400)">43.2 m/s</div></div><div><div class="k">API Limit</div><div class="v">40 m/s</div></div><div><div class="k">ρv²</div><div class="v" style="color:var(--r-400)">27,973</div></div><div><div class="k">Volume Flow</div><div class="v">5,496 m³/h</div></div><div><div class="k">Mix Density</div><div class="v">34.0 kg/m³</div></div></div></div>
+    <div class="panel-section"><div class="panel-section-title">Why it exceeds</div><p style="font-size:13px;color:var(--text-2);line-height:1.8">Based on <strong>assumed 8" riser (ID ≈ 202 mm — verify against P&ID / isometrics)</strong>, velocity reaches <strong style="color:var(--r-400)">43.2 m/s</strong> vs API RP 14E erosional velocity (Ve = C/√ρ ≈ 28.5 m/s, C=100). W7 maintenance rerouted C01, C02 to W4 — same flow, smaller pipe. <em>Actual pipe diameter required to confirm this case.</em></p></div>
+    <div class="panel-section"><div class="panel-section-title">Key Values</div><div class="panel-kv"><div><div class="k">Date</div><div class="v">2032-01-10</div></div><div><div class="k">Pipe Size (assumed)</div><div class="v" style="color:var(--w-300)">8" nom · ID 202 mm</div></div><div><div class="k">Velocity (assumed 8")</div><div class="v" style="color:var(--r-400)">43.2 m/s</div></div><div><div class="k">API Ve (C=100)</div><div class="v">~28.5 m/s</div></div><div><div class="k">Volume Flow</div><div class="v">5,000 m³/h</div></div><div><div class="k">Mix Density</div><div class="v">34.0 kg/m³</div></div></div></div>
     <div class="panel-section"><div class="panel-section-title">Contributing Wells</div><div class="contrib-row"><span class="name">B01, B02 (W4 native)</span><span class="val">Normal routing</span></div><div class="contrib-row"><span class="name">C01, C02 (from W7)</span><span class="val">Maintenance reroute</span></div></div>
     <div class="panel-section"><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm sim-btn" data-case="case2" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button><button class="btn btn-sm" onclick="closePanel();navigateTo('production');setTimeout(()=>{selectNode('w4')},200)">View in Topology</button></div></div>`},
   case3:{t:'LP Separator — Peak Liquid',h:`
