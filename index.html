@@ -194,11 +194,17 @@ body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); c
 .topo-container { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
 .topo-canvas { height: 320px; background: var(--n-25); }
 .topo-canvas svg { width: 100%; height: 100%; }
-.topo-controls { padding: 12px 20px; border-top: 1px solid var(--border-subtle); display: flex; align-items: center; gap: 16px; font-size: 12px; }
-.topo-controls label { color: var(--text-3); font-weight: 500; }
-.topo-controls input[type=range] { width: 180px; accent-color: var(--accent); }
-.topo-controls .year { font-weight: 700; min-width: 36px; }
-.topo-controls select { font-size: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 5px 10px; background: var(--surface); color: var(--text-2); font-family: inherit; }
+.topo-controls { padding: 12px 20px; border-top: 1px solid var(--border-subtle); display: flex; align-items: center; gap: 12px; font-size: 12px; }
+.topo-controls label { color: var(--text-3); font-weight: 500; white-space: nowrap; }
+.topo-controls input[type=range] { flex: 1; accent-color: var(--accent); cursor: pointer; }
+.topo-controls .year { font-weight: 700; min-width: 64px; color: var(--accent); }
+.topo-controls select { font-size: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 5px 10px; background: var(--surface); color: var(--text-2); font-family: inherit; white-space: nowrap; }
+.pipe-legend { padding: 8px 20px; border-top: 1px solid var(--border-subtle); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; background: var(--n-25); }
+.pipe-legend-label { font-size: 10px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; margin-right: 4px; white-space: nowrap; }
+.pipe-tag { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px; background: var(--n-100); color: var(--text-2); border: 1px solid var(--border-subtle); font-family: 'JetBrains Mono', monospace; }
+.pipe-tag.govern { background: var(--r-50); color: var(--r-400); border-color: var(--r-200); }
+.pipe-tag.small { background: var(--w-50); color: var(--w-400); border-color: var(--w-200); }
+.pipe-legend-note { font-size: 10px; color: var(--text-3); margin-left: auto; font-style: italic; }
 
 .node-inspector { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-top: 16px; }
 .node-inspector h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
@@ -289,7 +295,7 @@ tr:hover td { background: var(--n-25); }
     <button class="login-btn" onclick="tryLogin()">Continue</button>
     <div class="login-error" id="login-error">Invalid code</div>
     <div class="login-hint">Hint: ada2026</div>
-    <div style="color: rgba(255,255,255,0.15); font-size: 10px; margin-top: 40px; letter-spacing: 0.05em;">v3.6.0</div>
+    <div style="color: rgba(255,255,255,0.15); font-size: 10px; margin-top: 40px; letter-spacing: 0.05em;">v3.7.0</div>
   </div>
 </div>
 
@@ -656,10 +662,21 @@ tr:hover td { background: var(--n-25); }
             <div class="topo-canvas"><svg id="topo-svg" width="100%" height="100%"></svg></div>
             <div class="topo-controls">
               <label>Timeline</label>
-              <input type="range" min="2025" max="2040" value="2031" oninput="const y=parseInt(this.value);document.getElementById('yr').textContent=y;drawTopo(y)">
-              <span class="year" id="yr">2031</span>
-              <div style="flex:1"></div>
+              <input type="range" min="0" max="179" value="72" step="1" oninput="const ym=sliderYM(parseInt(this.value));document.getElementById('yr').textContent=ym.label;drawTopo(ym.year)">
+              <span class="year" id="yr">Jan 2031</span>
               <select><option>Full network</option><option>Separators only</option><option>Highlight anomalies</option></select>
+            </div>
+            <div class="pipe-legend">
+              <span class="pipe-legend-label">Assumed pipe sizes</span>
+              <span class="pipe-tag">N3 · 12"</span>
+              <span class="pipe-tag">N6 · 10"</span>
+              <span class="pipe-tag govern">W4 · 8" ↑ governs</span>
+              <span class="pipe-tag">W7 · 10"</span>
+              <span class="pipe-tag">E1 · 8"</span>
+              <span class="pipe-tag">E2 · 8"</span>
+              <span class="pipe-tag small">N8 · 6" ↓ turndown</span>
+              <span class="pipe-tag">W3 · 8"</span>
+              <span class="pipe-legend-note">Assumed SCH 40 — verify against P&ID / isometrics</span>
             </div>
           </div>
           <div class="node-inspector" id="node-detail">
@@ -889,8 +906,18 @@ const riserPipes = {
   w3:{dn:'8"', id:'202 mm',wt:'SCH 40'},
 };
 
+function sliderYM(val) {
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const year = 2025 + Math.floor(val / 12);
+  const month = val % 12;
+  return { year, label: months[month] + ' ' + year };
+}
+
 function drawTopo(year) {
-  year = year || parseInt(document.getElementById('yr').textContent) || 2031;
+  if (!year) {
+    const txt = document.getElementById('yr').textContent;
+    year = parseInt(txt.split(' ').pop()) || 2031;
+  }
   const svg = document.getElementById('topo-svg');
   if (!svg) return;
   const W = svg.parentElement.getBoundingClientRect().width || 700;
