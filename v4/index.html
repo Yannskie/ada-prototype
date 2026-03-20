@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ADA 3.0</title>
+<title>ADA v4 · Prototype</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
@@ -275,6 +275,75 @@ tr:hover td { background: var(--n-25); }
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-thumb { background: var(--n-200); border-radius: 3px; }
 
+/* ── RANKED SCREENER PANEL ── */
+.screener-intro {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 16px 22px; margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.screener-intro-left { display: flex; align-items: center; gap: 10px; }
+.screener-intro-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--g-300); flex-shrink: 0; }
+.screener-intro-text { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+.screener-intro-text strong { color: var(--text); }
+.screener-intro-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; background: var(--g-50); color: var(--g-300); border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; flex-shrink: 0; }
+
+.screener-section { margin-bottom: 36px; }
+.screener-section-hdr {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px; padding-bottom: 12px; border-bottom: 2px solid var(--border-subtle);
+}
+.ssi { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.ssi svg { width: 14px; height: 14px; }
+.ssi-riser    { background: var(--p-50); color: var(--p-500); }
+.ssi-sep      { background: var(--s-50); color: var(--s-300); }
+.ssi-metric   { background: var(--w-50); color: var(--w-400); }
+.ssi-routing  { background: var(--r-50); color: var(--r-400); }
+.screener-section-title { font-size: 13px; font-weight: 700; }
+.screener-section-meta  { font-size: 11px; color: var(--text-3); margin-left: auto; font-style: italic; }
+
+.ranked-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  margin-bottom: 10px; overflow: hidden; cursor: pointer; transition: var(--transition);
+}
+.ranked-card:hover { border-color: var(--p-200); box-shadow: 0 3px 16px rgba(53,114,176,0.09); transform: translateY(-1px); }
+.ranked-inner { padding: 16px 20px; display: flex; gap: 14px; align-items: flex-start; }
+.ranked-rank {
+  width: 24px; height: 24px; border-radius: 6px;
+  background: var(--p-400); color: #fff; font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;
+}
+.ranked-rank.r2 { background: var(--w-300); }
+.ranked-rank.r3 { background: var(--n-300); }
+.ranked-rank.r-err { background: var(--r-400); }
+.ranked-body { flex: 1; min-width: 0; }
+.ranked-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 4px; }
+.ranked-title { font-size: 13px; font-weight: 700; letter-spacing: -0.01em; }
+.ranked-sub { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+.ranked-why {
+  font-size: 12px; color: var(--text-2); line-height: 1.65; margin-top: 9px;
+  padding: 9px 12px; background: var(--n-25);
+  border-left: 2px solid var(--p-200); border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.ranked-why strong { color: var(--text); font-weight: 600; }
+.ranked-why.why-warn  { border-left-color: var(--w-300); }
+.ranked-why.why-err   { border-left-color: var(--r-300); }
+.ranked-why.why-route { border-left-color: var(--s-200); }
+.ranked-metrics { display: flex; gap: 22px; margin-top: 12px; flex-wrap: wrap; }
+.rm { display: flex; flex-direction: column; }
+.rm .rm-l { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); }
+.rm .rm-v { font-size: 16px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
+.rm .rm-v.danger  { color: var(--r-400); }
+.rm .rm-v.warning { color: var(--w-300); }
+.rm .rm-v.ok      { color: var(--g-300); }
+.rm .rm-u { font-size: 9px; color: var(--text-3); }
+.util-mini { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+.util-mini-label { font-size: 10px; font-weight: 600; color: var(--text-2); min-width: 100px; }
+.util-mini-track { flex: 1; height: 5px; background: var(--n-100); border-radius: 3px; overflow: hidden; }
+.util-mini-fill { height: 100%; border-radius: 3px; }
+.util-mini-val { font-size: 11px; font-weight: 700; min-width: 36px; text-align: right; }
+.contribs { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; }
+.cpill { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: var(--n-100); color: var(--text-2); border: 1px solid var(--border-subtle); }
+.ranked-footer { display: flex; gap: 6px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border-subtle); }
+
 @media (max-width: 1100px) {
   .dash-grid { grid-template-columns: 1fr; }
   .case-metrics { grid-template-columns: repeat(2, 1fr); }
@@ -289,14 +358,14 @@ tr:hover td { background: var(--n-25); }
 <div class="login-overlay" id="login-overlay">
   <div class="login-box">
     <div class="login-logo">A</div>
-    <h2>ADA 3.0</h2>
+    <h2>ADA</h2>
     <p>Asset Design & Analysis Platform</p>
-    <div style="display:inline-block; margin-top:10px; padding:4px 16px; border:1px solid rgba(255,255,255,0.25); border-radius:20px; font-size:12px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.6);">Prototype</div>
+    <div style="display:inline-block; margin-top:10px; padding:6px 20px; border:1.5px solid rgba(255,200,80,0.5); border-radius:20px; font-size:13px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,200,80,0.9); background:rgba(255,200,80,0.08);">⬡ Prototype · v4</div>
     <input type="password" id="login-input" placeholder="Access code" autofocus onkeydown="if(event.key==='Enter')tryLogin()">
     <button class="login-btn" onclick="tryLogin()">Continue</button>
     <div class="login-error" id="login-error">Invalid code</div>
     <div class="login-hint">Hint: ada2026</div>
-    <div style="color: rgba(255,255,255,0.15); font-size: 10px; margin-top: 40px; letter-spacing: 0.05em;">v3.7.0</div>
+    <div style="color: rgba(255,255,255,0.15); font-size: 10px; margin-top: 40px; letter-spacing: 0.05em;">v4.0.0-prototype · Ranked Screening Engine</div>
   </div>
 </div>
 
@@ -652,13 +721,441 @@ tr:hover td { background: var(--n-25); }
           <button class="chip" onclick="selectProfile(this)">A24</button>
           <div style="flex:1"></div>
           <div class="tab-bar inline">
-            <button class="tab active" data-vt="topo" onclick="switchView(this)">Topology</button>
+            <button class="tab active" data-vt="screener" onclick="switchView(this)">⚡ Screener</button>
+            <button class="tab" data-vt="topo" onclick="switchView(this)">Topology</button>
             <button class="tab" data-vt="cases" onclick="switchView(this)">Cases</button>
             <button class="tab" data-vt="data" onclick="switchView(this)">Data</button>
           </div>
         </div>
 
-        <div class="view-content" id="view-topo">
+        <!-- ====== SCREENER VIEW (default) ====== -->
+        <div class="view-content" id="view-screener">
+
+          <!-- Intro banner -->
+          <div class="screener-intro">
+            <div class="screener-intro-left">
+              <div class="screener-intro-dot"></div>
+              <div class="screener-intro-text">
+                <strong>Automatic screening complete.</strong> The engine has scanned 57 timesteps across 3 production profiles, aggregated upstream flow per riser/separator, checked routing validity, and ranked the most relevant cases below. Click any card to inspect why it was selected and trace contributing wells — then open in Topology or add directly to simulation.
+              </div>
+            </div>
+            <div class="screener-intro-badge">✓ 57 timesteps · 3 profiles</div>
+          </div>
+
+          <!-- ── SECTION 1: RISER PEAKS ── -->
+          <div class="screener-section">
+            <div class="screener-section-hdr">
+              <div class="ssi ssi-riser">
+                <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="4" r="2"/><circle cx="3" cy="11" r="1.5"/><circle cx="11" cy="11" r="1.5"/><line x1="7" y1="6" x2="3" y2="9.5"/><line x1="7" y1="6" x2="11" y2="9.5"/></svg>
+              </div>
+              <span class="screener-section-title">Riser Peak Cases</span>
+              <span class="screener-section-meta">Highest aggregated upstream gas load per riser · ranked by severity score</span>
+            </div>
+
+            <!-- Riser #1 -->
+            <div class="ranked-card" onclick="openPanel('case2')">
+              <div class="ranked-inner">
+                <div class="ranked-rank r-err">1</div>
+                <div class="ranked-body">
+                  <div class="ranked-top">
+                    <div>
+                      <div class="ranked-title">W4 Riser — Maintenance Reroute Peak</div>
+                      <div class="ranked-sub">Profile A20 · 2032-01-10 · W7 offline, C01+C02 redirected</div>
+                    </div>
+                    <span class="severity sev-exc">Exceedance</span>
+                  </div>
+                  <div class="ranked-why why-err"><strong>Why selected:</strong> W7 maintenance rerouted wells C01 and C02 onto W4 (8" riser), creating the <strong>highest erosional velocity event across all risers</strong>. Same throughput, smaller pipe — API RP 14E Ve exceeded at <strong>43.2 m/s vs limit 28.5 m/s</strong>. Topology change caused this to appear mid-profile; not visible without routing-aware aggregation.</div>
+                  <div class="ranked-metrics">
+                    <div class="rm"><div class="rm-l">Velocity (assumed 8")</div><div class="rm-v danger">43.2</div><div class="rm-u">m/s</div></div>
+                    <div class="rm"><div class="rm-l">API RP 14E Ve</div><div class="rm-v">28.5</div><div class="rm-u">m/s</div></div>
+                    <div class="rm"><div class="rm-l">Mix Density</div><div class="rm-v">34.0</div><div class="rm-u">kg/m³</div></div>
+                    <div class="rm"><div class="rm-l">Vol. Flow</div><div class="rm-v">5,000</div><div class="rm-u">m³/h</div></div>
+                  </div>
+                  <div class="contribs">
+                    <span class="cpill">B01</span><span class="cpill">B02</span>
+                    <span class="cpill" style="background:var(--r-50);color:var(--r-400);border-color:var(--r-200)">C01 ↺ reroute</span>
+                    <span class="cpill" style="background:var(--r-50);color:var(--r-400);border-color:var(--r-200)">C02 ↺ reroute</span>
+                  </div>
+                  <div class="ranked-footer">
+                    <button class="btn btn-sm btn-primary sim-btn" data-case="case2" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
+                    <button class="btn btn-sm" onclick="event.stopPropagation(); closePanel(); navigateTo('production'); setTimeout(()=>{document.querySelector('[data-vt=topo]').click(); setTimeout(()=>selectNode('w4'),100)},120)">Open in Topology</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Riser #2 -->
+            <div class="ranked-card" onclick="openPanel('riser2')">
+              <div class="ranked-inner">
+                <div class="ranked-rank r2">2</div>
+                <div class="ranked-body">
+                  <div class="ranked-top">
+                    <div>
+                      <div class="ranked-title">N3 Riser — Routing Change Peak</div>
+                      <div class="ranked-sub">Profile A20 · 2034-03-01 · A05 permanently rerouted to N3</div>
+                    </div>
+                    <span class="severity sev-routing">Routing</span>
+                  </div>
+                  <div class="ranked-why why-route"><strong>Why selected:</strong> Permanent reroute of A05 from N6 to N3 created a <strong>new dominant load path</strong> to HP Separator. N3 gas throughput increased by +0.4 MSm³/d — this topology had never existed in earlier timesteps. Must verify pressure drop and downstream HP Separator loading under new configuration.</div>
+                  <div class="ranked-metrics">
+                    <div class="rm"><div class="rm-l">N3 Gas (post-route)</div><div class="rm-v warning">1.3M</div><div class="rm-u">Sm³/d</div></div>
+                    <div class="rm"><div class="rm-l">Δ vs pre-route</div><div class="rm-v">+0.4M</div><div class="rm-u">Sm³/d</div></div>
+                    <div class="rm"><div class="rm-l">Wells on N3</div><div class="rm-v">6</div></div>
+                    <div class="rm"><div class="rm-l">HP Sep total</div><div class="rm-v">2.9M</div><div class="rm-u">Sm³/d</div></div>
+                  </div>
+                  <div class="contribs">
+                    <span class="cpill">A01</span><span class="cpill">A02</span><span class="cpill">A03</span>
+                    <span class="cpill" style="background:var(--s-50);color:var(--s-300);border-color:var(--s-100)">A05 ↺ rerouted from N6</span>
+                  </div>
+                  <div class="ranked-footer">
+                    <button class="btn btn-sm btn-primary sim-btn" data-case="case5" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
+                    <button class="btn btn-sm" onclick="event.stopPropagation(); closePanel(); navigateTo('production'); setTimeout(()=>{document.querySelector('[data-vt=topo]').click(); setTimeout(()=>selectNode('n3'),100)},120)">Open in Topology</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Riser #3 -->
+            <div class="ranked-card" onclick="openPanel('riser3')">
+              <div class="ranked-inner">
+                <div class="ranked-rank r3">3</div>
+                <div class="ranked-body">
+                  <div class="ranked-top">
+                    <div>
+                      <div class="ranked-title">N8 Riser — Turndown / Late-Life</div>
+                      <div class="ranked-sub">Profile A20 · 2039-11-01 · E01/E02 in decline, flow instability risk</div>
+                    </div>
+                    <span class="severity sev-turndown">Turndown</span>
+                  </div>
+                  <div class="ranked-why"><strong>Why selected:</strong> Post-2037, N8 gas rate drops to <strong>72% of minimum stable flow</strong>. E01 and E02 show decline flags. Turndown risk for riser stability and downstream LP Separator slug behaviour. Required to size for minimum flow regime, not just peak.</div>
+                  <div class="ranked-metrics">
+                    <div class="rm"><div class="rm-l">Gas Rate</div><div class="rm-v warning">0.31M</div><div class="rm-u">Sm³/d</div></div>
+                    <div class="rm"><div class="rm-l">Turndown ratio</div><div class="rm-v warning">72%</div></div>
+                    <div class="rm"><div class="rm-l">Min stable flow</div><div class="rm-v">0.43M</div><div class="rm-u">Sm³/d</div></div>
+                  </div>
+                  <div class="contribs">
+                    <span class="cpill" style="background:var(--w-50);color:var(--w-400);border-color:var(--w-300)">E01 ↓ declining</span>
+                    <span class="cpill" style="background:var(--w-50);color:var(--w-400);border-color:var(--w-300)">E02 ? uncertain</span>
+                  </div>
+                  <div class="ranked-footer">
+                    <button class="btn btn-sm btn-primary sim-btn" data-case="case4" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
+                    <button class="btn btn-sm" onclick="event.stopPropagation(); closePanel(); navigateTo('production'); setTimeout(()=>{document.querySelector('[data-vt=topo]').click(); setTimeout(()=>selectNode('n8'),100)},120)">Open in Topology</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── SECTION 2: SEPARATOR LOADS ── -->
+          <div class="screener-section">
+            <div class="screener-section-hdr">
+              <div class="ssi ssi-sep">
+                <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="10" height="6" rx="2"/><line x1="7" y1="1" x2="7" y2="4"/><line x1="7" y1="10" x2="7" y2="13"/></svg>
+              </div>
+              <span class="screener-section-title">Separator Load Cases</span>
+              <span class="screener-section-meta">Ranked by load ratio vs design capacity · severity = max(gas ratio, liquid ratio)</span>
+            </div>
+
+            <!-- Sep #1 -->
+            <div class="ranked-card" onclick="openPanel('case1')">
+              <div class="ranked-inner">
+                <div class="ranked-rank r-err">1</div>
+                <div class="ranked-body">
+                  <div class="ranked-top">
+                    <div>
+                      <div class="ranked-title">HP Separator — Peak Gas Load</div>
+                      <div class="ranked-sub">Profile A20 · 2031-06-15 · All 4 HP-feed risers near-peak simultaneously</div>
+                    </div>
+                    <span class="severity sev-exc">Exceedance</span>
+                  </div>
+                  <div class="ranked-why why-err"><strong>Why selected:</strong> Aggregated gas flow to HP Separator reaches <strong>3.2 MSm³/d — 118% of assumed design (2.7 MSm³/d)</strong>. All four HP-feed risers producing near-peak simultaneously following routing change that moved A05–A06 to N6. This is the single highest capacity exceedance in the profile. <em>Design capacity is an engineering assumption — confirm against equipment datasheet.</em></div>
+                  <div class="util-mini">
+                    <span class="util-mini-label">Gas load ratio</span>
+                    <div class="util-mini-track"><div class="util-mini-fill exceed" style="width:100%; background:var(--r-300)"></div></div>
+                    <span class="util-mini-val" style="color:var(--r-400)">118%</span>
+                  </div>
+                  <div class="ranked-metrics">
+                    <div class="rm"><div class="rm-l">Gas Flow</div><div class="rm-v danger">3.2M</div><div class="rm-u">Sm³/d</div></div>
+                    <div class="rm"><div class="rm-l">Design capacity</div><div class="rm-v">2.7M</div><div class="rm-u">Sm³/d assumed</div></div>
+                    <div class="rm"><div class="rm-l">Pressure</div><div class="rm-v">72</div><div class="rm-u">bar</div></div>
+                    <div class="rm"><div class="rm-l">Temperature</div><div class="rm-v">68</div><div class="rm-u">°C</div></div>
+                  </div>
+                  <div class="contribs">
+                    <span class="cpill">N3 · 44%</span><span class="cpill">N6 · 34%</span><span class="cpill">W4 · 13%</span><span class="cpill">W7 · 9%</span>
+                  </div>
+                  <div class="ranked-footer">
+                    <button class="btn btn-sm btn-primary sim-btn" data-case="case1" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
+                    <button class="btn btn-sm" onclick="event.stopPropagation(); closePanel(); navigateTo('production'); setTimeout(()=>{document.querySelector('[data-vt=topo]').click(); setTimeout(()=>selectNode('hp'),100)},120)">Open in Topology</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sep #2 -->
+            <div class="ranked-card" onclick="openPanel('case3')">
+              <div class="ranked-inner">
+                <div class="ranked-rank r2">2</div>
+                <div class="ranked-body">
+                  <div class="ranked-top">
+                    <div>
+                      <div class="ranked-title">LP Separator — Peak Liquid Load</div>
+                      <div class="ranked-sub">Profile A21 · 2033-09-22 · E2 WC increase + N6 new well tie-in</div>
+                    </div>
+                    <span class="severity sev-margin">Marginal</span>
+                  </div>
+                  <div class="ranked-why why-warn"><strong>Why selected:</strong> LP Separator liquid throughput reaches <strong>2,800 Sm³/d — 93% of design</strong>. Not exceeded but limited margin. Driven by rising E2 water cut and new well contributing to N6. Governs <strong>liquid residence time and slug catcher sizing</strong>. Must be verified before reducing separator volume.</div>
+                  <div class="util-mini">
+                    <span class="util-mini-label">Liquid load ratio</span>
+                    <div class="util-mini-track"><div class="util-mini-fill marginal" style="width:93%; background:var(--w-300)"></div></div>
+                    <span class="util-mini-val" style="color:var(--w-300)">93%</span>
+                  </div>
+                  <div class="ranked-metrics">
+                    <div class="rm"><div class="rm-l">Liquid Flow</div><div class="rm-v warning">2,800</div><div class="rm-u">Sm³/d</div></div>
+                    <div class="rm"><div class="rm-l">Design</div><div class="rm-v">3,000</div><div class="rm-u">Sm³/d</div></div>
+                    <div class="rm"><div class="rm-l">Water Cut</div><div class="rm-v">0.68</div></div>
+                    <div class="rm"><div class="rm-l">Pressure</div><div class="rm-v">12</div><div class="rm-u">bar</div></div>
+                  </div>
+                  <div class="contribs">
+                    <span class="cpill">E1</span><span class="cpill">E2</span><span class="cpill">N8</span><span class="cpill">W3</span>
+                  </div>
+                  <div class="ranked-footer">
+                    <button class="btn btn-sm btn-primary sim-btn" data-case="case3" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
+                    <button class="btn btn-sm" onclick="event.stopPropagation(); closePanel(); navigateTo('production'); setTimeout(()=>{document.querySelector('[data-vt=topo]').click(); setTimeout(()=>selectNode('lp'),100)},120)">Open in Topology</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sep #3 — water handling -->
+            <div class="ranked-card" onclick="openPanel('case6')">
+              <div class="ranked-inner">
+                <div class="ranked-rank r3">3</div>
+                <div class="ranked-body">
+                  <div class="ranked-top">
+                    <div>
+                      <div class="ranked-title">LP Separator — End-of-Life Water Handling</div>
+                      <div class="ranked-sub">Profile A24 · 2038-06-01 · E2 Riser max water cut governs water treatment</div>
+                    </div>
+                    <span class="severity sev-design">Design</span>
+                  </div>
+                  <div class="ranked-why"><strong>Why selected:</strong> E2 Riser water cut reaches <strong>0.92 — highest across all risers over field life</strong>. LP Separator water handling at 88% of capacity. This case defines water treatment sizing and hydrate inhibition requirements. Selected as a distinct case — different criterion from liquid peak (case 2) above.</div>
+                  <div class="util-mini">
+                    <span class="util-mini-label">Water handling</span>
+                    <div class="util-mini-track"><div class="util-mini-fill marginal" style="width:88%; background:var(--w-300)"></div></div>
+                    <span class="util-mini-val" style="color:var(--w-300)">88%</span>
+                  </div>
+                  <div class="ranked-metrics">
+                    <div class="rm"><div class="rm-l">Water Cut</div><div class="rm-v warning">0.92</div></div>
+                    <div class="rm"><div class="rm-l">Water Rate</div><div class="rm-v">2,640</div><div class="rm-u">Sm³/d</div></div>
+                    <div class="rm"><div class="rm-l">Temp</div><div class="rm-v">48</div><div class="rm-u">°C</div></div>
+                  </div>
+                  <div class="ranked-footer">
+                    <button class="btn btn-sm btn-primary sim-btn" data-case="case6" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
+                    <button class="btn btn-sm" onclick="event.stopPropagation(); closePanel(); navigateTo('production'); setTimeout(()=>{document.querySelector('[data-vt=topo]').click(); setTimeout(()=>selectNode('lp'),100)},120)">Open in Topology</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── SECTION 3: HIGH METRICS ── -->
+          <div class="screener-section">
+            <div class="screener-section-hdr">
+              <div class="ssi ssi-metric">
+                <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="2,10 5,6 8,8 12,3"/><line x1="2" y1="12" x2="12" y2="12"/></svg>
+              </div>
+              <span class="screener-section-title">High Metric Cases</span>
+              <span class="screener-section-meta">Peak velocity · pressure · gas rate · water cut — ranked by severity vs engineering limit</span>
+            </div>
+
+            <div class="ranked-card" onclick="openPanel('case2')">
+              <div class="ranked-inner">
+                <div class="ranked-rank r-err">1</div>
+                <div class="ranked-body">
+                  <div class="ranked-top">
+                    <div>
+                      <div class="ranked-title">W4 Riser — Peak Erosional Velocity</div>
+                      <div class="ranked-sub">Profile A20 · 2032-01-10 · 151% of API RP 14E erosional velocity</div>
+                    </div>
+                    <span class="severity sev-exc">Exceedance</span>
+                  </div>
+                  <div class="ranked-why why-err"><strong>Metric:</strong> velocity_m_s · severity = actual / Ve limit = <strong>43.2 / 28.5 = 1.51</strong>. Highest velocity ratio across all risers for entire field life. Riser pipe size is assumed 8" SCH 40 — must confirm against P&ID before formal study.</div>
+                  <div class="ranked-metrics">
+                    <div class="rm"><div class="rm-l">Velocity (8" assumed)</div><div class="rm-v danger">43.2</div><div class="rm-u">m/s</div></div>
+                    <div class="rm"><div class="rm-l">Ve (C=100)</div><div class="rm-v">28.5</div><div class="rm-u">m/s</div></div>
+                    <div class="rm"><div class="rm-l">ρv²</div><div class="rm-v danger">63.7k</div><div class="rm-u">Pa</div></div>
+                  </div>
+                  <div class="ranked-footer">
+                    <button class="btn btn-sm btn-primary sim-btn" data-case="case2" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ranked-card" onclick="openPanel('case1')">
+              <div class="ranked-inner">
+                <div class="ranked-rank r2">2</div>
+                <div class="ranked-body">
+                  <div class="ranked-top">
+                    <div>
+                      <div class="ranked-title">HP Separator — Peak Gas Rate</div>
+                      <div class="ranked-sub">Profile A20 · 2031-06-15 · Highest facility-level gas throughput in profile</div>
+                    </div>
+                    <span class="severity sev-exc">Exceedance</span>
+                  </div>
+                  <div class="ranked-why why-err"><strong>Metric:</strong> gas_rate_sm3_d at separator level · severity = 3.2M / 2.7M = <strong>118%</strong>. Peak facility gas production — governs compression sizing, gas export design, and flare system capacity.</div>
+                  <div class="ranked-metrics">
+                    <div class="rm"><div class="rm-l">Gas rate</div><div class="rm-v danger">3.2M</div><div class="rm-u">Sm³/d</div></div>
+                    <div class="rm"><div class="rm-l">vs design</div><div class="rm-v danger">118%</div></div>
+                  </div>
+                  <div class="ranked-footer">
+                    <button class="btn btn-sm btn-primary sim-btn" data-case="case1" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ranked-card" onclick="openPanel('case6')">
+              <div class="ranked-inner">
+                <div class="ranked-rank r3">3</div>
+                <div class="ranked-body">
+                  <div class="ranked-top">
+                    <div>
+                      <div class="ranked-title">E2 Riser — Max Water Cut (Field Life)</div>
+                      <div class="ranked-sub">Profile A24 · 2038-06-01 · WC = 0.92 — highest across all risers</div>
+                    </div>
+                    <span class="severity sev-design">Design</span>
+                  </div>
+                  <div class="ranked-why"><strong>Metric:</strong> water_cut per riser · severity = 0.92 (dimensionless). Defines corrosion inhibition dosing, hydrate inhibitor demand, and water treatment capacity. Distinct case — not the same timestep as the liquid peak.</div>
+                  <div class="ranked-metrics">
+                    <div class="rm"><div class="rm-l">Water Cut</div><div class="rm-v warning">0.92</div></div>
+                    <div class="rm"><div class="rm-l">Water Rate</div><div class="rm-v">2,640</div><div class="rm-u">Sm³/d</div></div>
+                    <div class="rm"><div class="rm-l">Temp</div><div class="rm-v">48</div><div class="rm-u">°C</div></div>
+                  </div>
+                  <div class="ranked-footer">
+                    <button class="btn btn-sm btn-primary sim-btn" data-case="case6" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── SECTION 4: ABNORMAL ROUTING ── -->
+          <div class="screener-section">
+            <div class="screener-section-hdr">
+              <div class="ssi ssi-routing">
+                <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="7" x2="12" y2="7"/><line x1="9" y1="4" x2="12" y2="7"/><line x1="9" y1="10" x2="12" y2="7"/><circle cx="2" cy="7" r="1.5" fill="currentColor"/><line x1="7" y1="7" x2="7" y2="2"/><line x1="5" y1="4" x2="7" y2="2"/><line x1="9" y1="4" x2="7" y2="2"/></svg>
+              </div>
+              <span class="screener-section-title">Abnormal Routing Cases</span>
+              <span class="screener-section-meta">Disconnected paths · unmapped objects · unexpected reroutes · load conservation issues</span>
+            </div>
+
+            <!-- Routing #1 — disconnected well -->
+            <div class="ranked-card" onclick="openRankPanel('anom1')">
+              <div class="ranked-inner">
+                <div class="ranked-rank r-err">!</div>
+                <div class="ranked-body">
+                  <div class="ranked-top">
+                    <div>
+                      <div class="ranked-title">Well J04 — No Downstream Separator Found</div>
+                      <div class="ranked-sub">Profiles A21 &amp; A22 · All timesteps · Severity: Disconnected path (score 100)</div>
+                    </div>
+                    <span class="severity sev-exc">Disconnected</span>
+                  </div>
+                  <div class="ranked-why why-err"><strong>Routing rule violated:</strong> Well J04 has no active path to any separator in profiles A21 and A22. Path traversal terminates before reaching a separator node — <strong>all production from J04 is unaccounted for</strong> in downstream aggregation. If left unresolved, HP/LP Separator load calculations will understate actual throughput. Action: check mapping file.</div>
+                  <div class="ranked-metrics">
+                    <div class="rm"><div class="rm-l">Severity score</div><div class="rm-v danger">100</div></div>
+                    <div class="rm"><div class="rm-l">Profiles affected</div><div class="rm-v danger">A21, A22</div></div>
+                    <div class="rm"><div class="rm-l">Rule triggered</div><div class="rm-v">No sep reached</div></div>
+                  </div>
+                  <div class="ranked-footer">
+                    <button class="btn btn-sm" style="border-color:var(--r-300);color:var(--r-400)" onclick="event.stopPropagation()">⚠ Fix Mapping</button>
+                    <button class="btn btn-sm" onclick="event.stopPropagation(); closePanel(); navigateTo('production'); setTimeout(()=>{document.querySelector('[data-vt=topo]').click()},120)">Open in Topology</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Routing #2 — unmapped riser -->
+            <div class="ranked-card" onclick="openRankPanel('anom2')">
+              <div class="ranked-inner">
+                <div class="ranked-rank r-err">!</div>
+                <div class="ranked-body">
+                  <div class="ranked-top">
+                    <div>
+                      <div class="ranked-title">E2 Riser — No Mapping After 2035-01-01</div>
+                      <div class="ranked-sub">Profile A24 · All timesteps post-2035 · Severity: Broken path (score 80)</div>
+                    </div>
+                    <span class="severity sev-exc">Broken Path</span>
+                  </div>
+                  <div class="ranked-why why-err"><strong>Routing rule violated:</strong> E2 Riser has no active downstream mapping after 2035-01-01 in profile A24. Path traversal for E2's source wells terminates at the riser node — no connection to LP Separator exists. <strong>All late-life E2 production is unrouted.</strong> This affects both load calculations and the E2 water cut case (which is currently calculated from earlier timesteps).</div>
+                  <div class="ranked-metrics">
+                    <div class="rm"><div class="rm-l">Severity score</div><div class="rm-v danger">80</div></div>
+                    <div class="rm"><div class="rm-l">Affected from</div><div class="rm-v danger">2035-01-01</div></div>
+                    <div class="rm"><div class="rm-l">Rule triggered</div><div class="rm-v">Broken path</div></div>
+                  </div>
+                  <div class="ranked-footer">
+                    <button class="btn btn-sm" style="border-color:var(--r-300);color:var(--r-400)" onclick="event.stopPropagation()">⚠ Fix Mapping</button>
+                    <button class="btn btn-sm" onclick="event.stopPropagation(); closePanel(); navigateTo('production'); setTimeout(()=>{document.querySelector('[data-vt=topo]').click(); setTimeout(()=>selectNode('e2'),100)},120)">Open in Topology</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Routing #3 — unexpected reroute -->
+            <div class="ranked-card" onclick="openRankPanel('anom3')">
+              <div class="ranked-inner">
+                <div class="ranked-rank r2">3</div>
+                <div class="ranked-body">
+                  <div class="ranked-top">
+                    <div>
+                      <div class="ranked-title">C01, C02 — Unexpected Reroute to W4</div>
+                      <div class="ranked-sub">Profile A20 · From 2032-01-10 · Severity: Unexpected route (score 60)</div>
+                    </div>
+                    <span class="severity sev-routing">Routing</span>
+                  </div>
+                  <div class="ranked-why why-route"><strong>Routing rule triggered:</strong> C01 and C02 expected route is W7 Riser (their home riser). From 2032, both are rerouted to W4 due to W7 maintenance. This is a <strong>topology change event</strong> — the system detected a source/riser pair not present in the expected routing table. This is the same event that causes the W4 velocity exceedance above.</div>
+                  <div class="ranked-metrics">
+                    <div class="rm"><div class="rm-l">Severity score</div><div class="rm-v warning">60</div></div>
+                    <div class="rm"><div class="rm-l">Expected riser</div><div class="rm-v">W7</div></div>
+                    <div class="rm"><div class="rm-l">Actual riser</div><div class="rm-v warning">W4</div></div>
+                  </div>
+                  <div class="ranked-footer">
+                    <button class="btn btn-sm" onclick="event.stopPropagation(); closePanel(); navigateTo('production'); setTimeout(()=>{document.querySelector('[data-vt=topo]').click(); setTimeout(()=>selectNode('w4'),100)},120)">Open in Topology</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Missing pressure data note -->
+            <div class="ranked-card" style="border-color:var(--n-100); opacity:0.75" onclick="openRankPanel('anom4')">
+              <div class="ranked-inner">
+                <div class="ranked-rank r3" style="background:var(--n-300)">~</div>
+                <div class="ranked-body">
+                  <div class="ranked-top">
+                    <div>
+                      <div class="ranked-title">A05 — Missing Pressure Data (3 Timesteps)</div>
+                      <div class="ranked-sub">Profile A20 · Null wellhead pressure · Severity: Data quality (score 20)</div>
+                    </div>
+                    <span class="severity sev-ok">Data Gap</span>
+                  </div>
+                  <div class="ranked-why"><strong>Data quality flag:</strong> 3 timesteps in A20 have null wellhead pressure for A05. Velocity and pressure-related calculations for these timesteps are based on interpolated values. Low severity — does not affect flow rate aggregation, but may affect pressure-drop and erosion calculations for those dates.</div>
+                  <div class="ranked-footer">
+                    <button class="btn btn-sm btn-ghost" onclick="event.stopPropagation()">Review Data</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Assumptions footnote -->
+          <div style="margin-top:4px;padding:10px 14px;background:var(--n-50);border:1px solid var(--border);border-radius:8px;font-size:11px;color:var(--text-3);line-height:1.7">
+            <strong style="color:var(--text-2)">¹ Calculation assumptions:</strong> Design capacities (HP/LP Separator) and pipe diameters are engineering assumptions for pre-assessment only. Severity scores use: riser_peak = 0.7×norm(gas_rate) + 0.2×norm(liquid_rate) + 0.1×norm(contributors); separator = max(gas_load_ratio, liquid_load_ratio); velocity = actual/Ve_limit; abnormal_routing = rule-based score (disconnected=100, broken=80, unexpected=60, data_gap=20). Distinct-case filter applied: ±30-day window per object. Confirm pipe sizes against P&ID / isometrics and equipment limits against datasheets before formal study.
+          </div>
+        </div>
+        <!-- ====== END SCREENER VIEW ====== -->
+
+        <div class="view-content" id="view-topo" style="display:none">
           <div class="topo-container">
             <div class="topo-canvas"><svg id="topo-svg" width="100%" height="100%"></svg></div>
             <div class="topo-controls">
@@ -868,7 +1365,11 @@ document.querySelectorAll('.sidebar-nav a').forEach(a => {
 function navigateTo(page) {
   document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.toggle('active', a.dataset.page === page));
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + page));
-  if (page === 'production') setTimeout(() => { drawTopo(); initCharts(); }, 80);
+  if (page === 'production') {
+    // If screener tab is currently active, nothing to draw; if topo is active, draw it
+    const activeTab = document.querySelector('#page-production .tab.active');
+    if (activeTab && activeTab.dataset.vt === 'topo') setTimeout(() => { drawTopo(); initCharts(); }, 80);
+  }
 
 }
 
@@ -884,6 +1385,7 @@ function switchView(el) {
   document.querySelectorAll('.view-content').forEach(c => c.style.display = 'none');
   el.classList.add('active');
   document.getElementById('view-' + el.dataset.vt).style.display = 'block';
+  if (el.dataset.vt === 'topo') setTimeout(() => { drawTopo(); initCharts(); }, 80);
 }
 
 function filterCases(el, type) {
@@ -1153,6 +1655,17 @@ const panels = {
     <div class="panel-section"><div class="panel-section-title">Why it's marginal</div><p style="font-size:13px;color:var(--text-2);line-height:1.8">Liquid flow reaches <strong style="color:var(--w-300)">2,800 Sm³/d</strong> — <strong>93% of design</strong> (3,000). Not exceeded, but limited margin. E2 water cut increase + N6 new well tie-in.</p></div>
     <div class="panel-section"><div class="panel-section-title">Key Values</div><div class="panel-kv"><div><div class="k">Date</div><div class="v">2033-09-22</div></div><div><div class="k">Liquid Flow</div><div class="v" style="color:var(--w-300)">2,800 Sm³/d</div></div><div><div class="k">Design</div><div class="v">3,000 Sm³/d</div></div><div><div class="k">Water Cut</div><div class="v">0.68</div></div><div><div class="k">Pressure</div><div class="v">12 bar</div></div><div><div class="k">Temperature</div><div class="v">52°C</div></div></div></div>
     <div class="panel-section"><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm sim-btn" data-case="case3" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button><button class="btn btn-sm" onclick="closePanel();navigateTo('production');setTimeout(()=>{selectNode('lp')},200)">View in Topology</button></div></div>`},
+  riser2:{t:'N3 Riser — Routing Change Peak',h:`
+    <div class="panel-section"><div class="panel-section-title">Screening Criterion</div><p style="font-size:13px;color:var(--text-2);line-height:1.8"><strong>Riser Peak · Routing Change.</strong> N3 Riser receives a permanent additional well (A05) from 2034, creating a new dominant load path to HP Separator. This timestep is selected because the topology change had never occurred in earlier timesteps — it must be verified under the new configuration.</p></div>
+    <div class="panel-section"><div class="panel-section-title">Why it was selected</div><p style="font-size:13px;color:var(--text-2);line-height:1.8">Screening engine detected: (1) routing edge for A05→N3 appears for the first time at 2034-03-01, (2) N3 aggregate gas rate increases by +0.4 MSm³/d vs prior timestep, (3) N3 becomes the highest-flow riser from this date. Ranked #2 riser peak by combined severity score.</p></div>
+    <div class="panel-section"><div class="panel-section-title">Key Values</div><div class="panel-kv"><div><div class="k">Date</div><div class="v">2034-03-01</div></div><div><div class="k">Profile</div><div class="v">A20</div></div><div><div class="k">N3 Gas (post-route)</div><div class="v" style="color:var(--w-300)">1.3M Sm³/d</div></div><div><div class="k">Δ vs prior step</div><div class="v">+0.4M Sm³/d</div></div><div><div class="k">Wells on N3</div><div class="v">6</div></div><div><div class="k">HP Sep total</div><div class="v">2.9M Sm³/d</div></div></div></div>
+    <div class="panel-section"><div class="panel-section-title">Riser Contributors</div><div class="contrib-row"><span class="name">A01, A02, A03 (N3 native)</span><span class="val">Normal routing</span></div><div class="contrib-row"><span class="name">A05 ↺ rerouted from N6</span><span class="val">+0.4M Sm³/d</span></div></div>
+    <div class="panel-section"><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm sim-btn" data-case="case5" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button><button class="btn btn-sm" onclick="closePanel();navigateTo('production');setTimeout(()=>{document.querySelector('[data-vt=topo]').click();setTimeout(()=>selectNode('n3'),100)},120)">View in Topology</button></div></div>`},
+  riser3:{t:'N8 Riser — Turndown / Late-Life',h:`
+    <div class="panel-section"><div class="panel-section-title">Screening Criterion</div><p style="font-size:13px;color:var(--text-2);line-height:1.8"><strong>Riser Turndown.</strong> Post-2037, N8 gas rate drops below minimum stable flow. E01 and E02 show decline flags. This case governs minimum flow regime design for N8 riser and downstream LP Separator slug behaviour.</p></div>
+    <div class="panel-section"><div class="panel-section-title">Why it was selected</div><p style="font-size:13px;color:var(--text-2);line-height:1.8">Screening engine calculated turndown ratio = actual gas rate / minimum stable flow = 72%. This is the lowest ratio observed on any riser post-peak production. Required to size for minimum flow — not only peak.</p></div>
+    <div class="panel-section"><div class="panel-section-title">Key Values</div><div class="panel-kv"><div><div class="k">Date</div><div class="v">2039-11-01</div></div><div><div class="k">Profile</div><div class="v">A20</div></div><div><div class="k">Gas Rate</div><div class="v" style="color:var(--w-300)">0.31M Sm³/d</div></div><div><div class="k">Min Stable Flow</div><div class="v">0.43M Sm³/d</div></div><div><div class="k">Turndown Ratio</div><div class="v" style="color:var(--w-300)">72%</div></div></div></div>
+    <div class="panel-section"><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm sim-btn" data-case="case4" onclick="event.stopPropagation(); toggleSim(this)">Add to Simulation</button><button class="btn btn-sm" onclick="closePanel();navigateTo('production');setTimeout(()=>{document.querySelector('[data-vt=topo]').click();setTimeout(()=>selectNode('n8'),100)},120)">View in Topology</button></div></div>`},
   line1:{t:'23-L-X001-BD20-10',h:`
     <div style="padding:14px 18px;background:var(--w-50);border-radius:8px;margin-bottom:24px;font-size:13px;color:var(--w-400);font-weight:500"><strong>Marginal:</strong> Peak velocity 38.5 m/s — 96% of 40 m/s limit</div>
     <div class="panel-section"><div class="panel-section-title">Line Properties</div><div class="panel-kv"><div><div class="k">Pipe Spec</div><div class="v">BD20</div></div><div><div class="k">DN</div><div class="v">10</div></div><div><div class="k">System</div><div class="v">23</div></div><div><div class="k">Service</div><div class="v">PV</div></div><div><div class="k">Length</div><div class="v">53.6 m</div></div><div><div class="k">Roughness</div><div class="v">0.05</div></div></div></div>
@@ -1161,6 +1674,56 @@ const panels = {
     <div class="panel-section"><div class="panel-section-title">Equipment</div><div class="panel-kv"><div><div class="k">Facility</div><div class="v">SKARV FPSO</div></div><div><div class="k">System</div><div class="v">24</div></div><div><div class="k">Type</div><div class="v">NGL Pump</div></div><div><div class="k">Status</div><div class="v" style="color:var(--g-300)">OK</div></div></div></div>
     <div class="panel-section"><div class="panel-section-title">Operating Range</div><div class="panel-kv"><div><div class="k">Power</div><div class="v">23–33 kW</div></div><div><div class="k">Volume Flow</div><div class="v">39–56 m³/h</div></div><div><div class="k">Inlet Density</div><div class="v">458–460 kg/m³</div></div><div><div class="k">Diff Pressure</div><div class="v">16 bar</div></div><div><div class="k">NPSH</div><div class="v">354–356 m</div></div></div></div>`},
 };
+
+// Anomaly / routing panel data
+const anomalyPanels = {
+  anom1: { t: 'J04 — Disconnected Well', h: `
+    <div style="padding:12px 16px;background:var(--r-50);border-radius:8px;margin-bottom:20px;font-size:13px;color:var(--r-400);font-weight:500;border:1px solid var(--r-100)">
+      ⚠ Severity 100 — Disconnected path: no downstream separator found
+    </div>
+    <div class="panel-section"><div class="panel-section-title">What the engine found</div>
+    <p style="font-size:13px;color:var(--text-2);line-height:1.8">Path traversal from well <strong>J04</strong> was run across all timesteps in profiles <strong>A21 and A22</strong>. No active routing edge exists that connects J04 to any riser or separator in these profiles. The well produces but its flow is unaccounted for in all downstream aggregation.</p></div>
+    <div class="panel-section"><div class="panel-section-title">Impact</div>
+    <p style="font-size:13px;color:var(--text-2);line-height:1.8">HP and LP Separator load calculations for A21/A22 <strong>understate actual throughput</strong> by the J04 contribution. Any case selected from A21/A22 may be under-screened. Exceedance may be masked.</p></div>
+    <div class="panel-section"><div class="panel-section-title">Required action</div>
+    <p style="font-size:13px;color:var(--text-2);line-height:1.8">Check the mapping file for A21/A22. Add or reinstate the routing edge from J04 → [riser] → [separator]. Re-run screening after mapping correction.</p></div>` },
+  anom2: { t: 'E2 Riser — Unmapped Post-2035', h: `
+    <div style="padding:12px 16px;background:var(--r-50);border-radius:8px;margin-bottom:20px;font-size:13px;color:var(--r-400);font-weight:500;border:1px solid var(--r-100)">
+      ⚠ Severity 80 — Broken path: E2 riser terminates before separator after 2035-01-01
+    </div>
+    <div class="panel-section"><div class="panel-section-title">What the engine found</div>
+    <p style="font-size:13px;color:var(--text-2);line-height:1.8">Profile A24 routing edges show E2 Riser connected to LP Separator before 2035-01-01. After that date, no active edge exists from E2 to any downstream node. All E2 source wells still have active production in A24 after 2035 — their flow has nowhere to go in the routing model.</p></div>
+    <div class="panel-section"><div class="panel-section-title">Impact</div>
+    <p style="font-size:13px;color:var(--text-2);line-height:1.8">The <strong>E2 water cut case (WC=0.92, 2038)</strong> was calculated from an earlier timestep where routing was still valid. If late-life E2 production is truly unrouted, the late-life LP Separator load is understated. The end-of-life design case may be affected.</p></div>
+    <div class="panel-section"><div class="panel-section-title">Required action</div>
+    <p style="font-size:13px;color:var(--text-2);line-height:1.8">Confirm intended routing for E2 Riser in A24 after 2035. If E2 continues to LP Separator, reinstate the mapping. If E2 is intentionally decommissioned, flag this explicitly in the profile with a note.</p></div>` },
+  anom3: { t: 'C01, C02 — Unexpected Reroute to W4', h: `
+    <div style="padding:12px 16px;background:var(--w-50);border-radius:8px;margin-bottom:20px;font-size:13px;color:var(--w-400);font-weight:500;border:1px solid var(--w-300)">
+      Route change: C01 and C02 moved from W7 to W4 from 2032-01-10
+    </div>
+    <div class="panel-section"><div class="panel-section-title">What the engine found</div>
+    <p style="font-size:13px;color:var(--text-2);line-height:1.8">Expected routing for C01 and C02 is W7 Riser. From 2032-01-10, both wells appear with an active routing edge to W4 instead. This was not in the expected routing table and was therefore flagged as an unexpected route event.</p></div>
+    <div class="panel-section"><div class="panel-section-title">Engineering context</div>
+    <p style="font-size:13px;color:var(--text-2);line-height:1.8">This is consistent with the W7 maintenance reroute scenario described in the production profile notes. The reroute is a known planned event — but the screening engine detected it automatically because the routing topology changed mid-profile.</p></div>
+    <div class="panel-section"><div class="panel-section-title">Consequence</div>
+    <p style="font-size:13px;color:var(--text-2);line-height:1.8">Same throughput, smaller pipe (W4 = 8" vs W7 = 10"). This is the root cause of the <strong>W4 erosional velocity exceedance</strong> (riser peak #1 above). The routing anomaly and the velocity exceedance are the same physical event — traceable back to one topology change.</p></div>` },
+  anom4: { t: 'A05 — Missing Pressure Data', h: `
+    <div style="padding:12px 16px;background:var(--n-50);border-radius:8px;margin-bottom:20px;font-size:13px;color:var(--text-2);font-weight:500;border:1px solid var(--border)">
+      Data quality · Severity 20 — 3 timesteps with null wellhead pressure
+    </div>
+    <div class="panel-section"><div class="panel-section-title">What the engine found</div>
+    <p style="font-size:13px;color:var(--text-2);line-height:1.8">3 timesteps in profile A20 have a null value for wellhead pressure on well A05. All other parameters (gas rate, oil rate, water rate) are present. The null pressure means velocity and pressure-drop calculations default to interpolated values for these dates.</p></div>
+    <div class="panel-section"><div class="panel-section-title">Impact</div>
+    <p style="font-size:13px;color:var(--text-2);line-height:1.8">Low severity. Flow rate aggregation is unaffected. Pressure-related calculations (ρv², ΔP) for A05 on those 3 dates use interpolation. If any of those dates are selected as a design case, the pressure assumption should be flagged in the study basis.</p></div>` }
+};
+
+function openRankPanel(id) {
+  const d = anomalyPanels[id]; if (!d) return;
+  document.getElementById('panel-title').textContent = d.t;
+  document.getElementById('panel-body').innerHTML = d.h;
+  document.getElementById('panel').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+}
 
 function openPanel(id) {
   const d = panels[id]; if(!d) return;
